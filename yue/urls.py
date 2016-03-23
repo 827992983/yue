@@ -21,9 +21,9 @@ from guest import views as guest_views
 from login import views as login_views
 
 urlpatterns = [
-    url(r'^', login_views.login, name='login'),
-    url(r'^/login', login_views.login, name='login'),
-    url(r'^admin', admin_views.home),
-    url(r'^guest/index/', guest_views.home),
-    url(r'^api/home/', api_views.home),
+    url(r'^login', login_views.index, name='index'),
+    url(r'^admin', admin_views.index),
+    url(r'^guest', guest_views.index),
+    url(r'^api', api_views.index),
+    url(r'^', login_views.index, name='index'),
 ]
