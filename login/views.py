@@ -6,39 +6,39 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from .forms import UserForm
 from .models import User
+import json
 
 # Create your views here.
 
 def index(request):
+    return render(request, 'index.html')
+
+def login(request):
     try:
         if request.method == 'POST':
-            form = UserForm(request.POST)
-
-            if form.is_valid():
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                identify = form.cleaned_data['identify']
+            form = json.loads(request.body)
+            if form is not None:
+                username = form['username']
+                password = form['password']
+                identify = form['identify']
                 userinfo = User.objects.filter(name=username)
                 if userinfo == None or len(userinfo) != 1:
                     return render(request, 'index.html')
 
                 if userinfo[0].identify == 'admin':
-                    if username == userinfo[0].name and password == userinfo[0].password and identify == userinfo[
-                        0].identify:
-                        return HttpResponseRedirect("admin?username=%s" % (username,))
-            else:
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                userinfo = User.objects.filter(name=username)
-                if userinfo == None or len(userinfo) != 1:
-                    return render(request, 'index.html')
-
-                if username == userinfo[0].name and password == userinfo[0].password:
-                    return HttpResponseRedirect("guest?username=%s" % (username,))
-
+                    if username == userinfo[0].name and password == userinfo[0].password and identify == userinfo[0].identify:
+                        ret = {'status': 0, 'msg': 'admin login', 'data':{'to':'admin'}}
+                    else:
+                        ret = {'status': 1001, 'msg': 'admin login', 'data':{}}
+                    return HttpResponse(json.dumps(ret))
+                else:
+                    if username == userinfo[0].name and password == userinfo[0].password and identify == userinfo[0].identify:
+                        ret = {'status': 0, 'msg': 'user login', 'data':{'to':'guest'}}
+                    else:
+                        ret = {'status': 1001, 'msg': 'user login', 'data':{}}
+                    return HttpResponse(json.dumps(ret))
     except:
         pass
-
-    return render(request, 'index.html')
+    ret = {'status': 1002, 'msg': 'login exception', 'data':{}}
+    return HttpResponse(json.dumps(ret))

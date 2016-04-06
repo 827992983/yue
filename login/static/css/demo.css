@@ -119,6 +119,9 @@ a{
 .codrops-top a:hover{
 	background: #fff;
 }
+.codrops-top span.left{
+	float: left;
+}
 .codrops-top span.right{
 	float: right;
 }

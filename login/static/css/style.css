@@ -216,6 +216,14 @@ p.signin.button{
 	width: 80%;
 }
 
+.keeplogin #logininfo {
+    float: right;
+    display: inline-block;
+    color: rgb(255, 0, 0);
+    font-size: 12px;
+    font-style: italic;
+}
+
 
 /*styling the links to change from one form to another */
 
