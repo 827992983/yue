@@ -1,0 +1,10 @@
+#div_change_pwd{
+    background: #ff0000;
+    color: #ffff00;
+    border: 2px;
+    margin: 2px;
+}
+
+label .label_change_pwd{
+    font-family: serif;
+}

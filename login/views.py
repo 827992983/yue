@@ -31,14 +31,26 @@ def login(request):
                         ret = {'status': 0, 'msg': 'admin login', 'data':{'to':'admin'}}
                     else:
                         ret = {'status': 1001, 'msg': 'admin login', 'data':{}}
-                    return HttpResponse(json.dumps(ret))
                 else:
                     if username == userinfo[0].name and password == userinfo[0].password and identify == userinfo[0].identify:
                         ret = {'status': 0, 'msg': 'user login', 'data':{'to':'guest'}}
                     else:
                         ret = {'status': 1001, 'msg': 'user login', 'data':{}}
-                    return HttpResponse(json.dumps(ret))
+
+                response = HttpResponse(json.dumps(ret))
+                if ret['status'] == 0:
+                    response.set_cookie('username', username, 1800)
+                return response
     except:
         pass
     ret = {'status': 1002, 'msg': 'login exception', 'data':{}}
     return HttpResponse(json.dumps(ret))
+
+def logout(request):
+    try:
+        ret = {'status': 0, 'msg': 'logout', 'data':{}}
+        response = HttpResponse(json.dumps(ret))
+        response.delete_cookie('username')
+    except:
+        pass
+    return response
