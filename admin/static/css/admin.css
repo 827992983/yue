@@ -4,7 +4,7 @@
 }
 
 body {
-    background: #fff url(../images/bg.jpg) repeat top left;
+    background: #fff url(/static/images/bg.jpg) repeat top left;
     color: #1d3c41;
     overflow-y: scroll;
 }
@@ -24,7 +24,7 @@ body {
 
 #adminlogo {
     /*background-color: #00FF00;*/
-    background-image: url(../images/logo.png);
+    background-image: url(/static/images/logo.png);
     border: 2px;
     height: 78px;
     width: 137px;
@@ -79,9 +79,12 @@ a {
     margin-top: 5px;
     margin-bottom: 5px;
     font-family: 'microsoft YaHei';
-    /*background-color: green;*/
+    border: 1px solid #ccc;
+    /*background-color: #269abc;*/
     float: left;
 }
+
+
 
 /*#mainifame {*/
 /*float: left;*/
@@ -158,11 +161,6 @@ a {
     text-align: center;
 }
 
-#mainiframe{
-    border: 0px;
-    width: auto;
-    height: auto;
-}
 
 /*
 #copyright {

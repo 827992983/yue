@@ -1,20 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/css/changepwd.css"/>
-    <script type="text/javascript" src="static/js/changepwd.js"></script>
-</head>
-<body>
-
-<div id="div_change_pwd">
-    <form id="form_change_pwd">
-        <label class="label_change_pwd">旧密码：</label> <input type="text"/>
-        <label class="label_change_pwd">新密码：</label> <input type="text"/>
-        <label class="label_change_pwd">确认新密码：</label> <input type="text"/>
-        <input id="submit_chang_pwd" type="submit"/>
-    </form>
-</div>
-
-</body>
-</html>
+<form id="form_change_pwd">
+    <input class="input_change_pwd" name="old" type="password"/> <label class="label_change_pwd">旧密码：</label>
+    <div class="clear"></div>
+    <input class="input_change_pwd" name="new" type="password"/> <label class="label_change_pwd">新密码：</label>
+    <div class="clear"></div>
+    <input class="input_change_pwd" name="confirm" type="password"/> <label class="label_change_pwd">确认新密码：</label>
+    <div class="clear"></div>
+    <input id="submit_chang_pwd" type="button" value="确认"/>
+</form>
