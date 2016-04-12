@@ -66,6 +66,7 @@ a {
 
 #mainaside {
     width: 15%;
+    height: 600px;
     margin-left: 5px;
     margin-top: 5px;
     font-family: 'microsoft YaHei';
@@ -74,7 +75,7 @@ a {
 
 #mainsession {
     width: 83%;
-    height: 606px;
+    height: 600px;
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -83,8 +84,6 @@ a {
     /*background-color: #269abc;*/
     float: left;
 }
-
-
 
 /*#mainifame {*/
 /*float: left;*/
@@ -160,7 +159,6 @@ a {
     background-color: #1d3c41;
     text-align: center;
 }
-
 
 /*
 #copyright {

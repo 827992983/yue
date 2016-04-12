@@ -4,13 +4,14 @@
     <meta charset="UTF-8"/>
     <title>YUE虚拟化管理平台</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="KVM虚拟化管理平台登录"/>
+    <meta name="description" content="KVM虚拟化管理平台"/>
     <meta name="keywords" content="KVM,虚拟化"/>
     <meta name="author" content="lijian"/>
     <!-- <link rel="shortcut icon" href="../favicon.ico">-->
     <link rel="stylesheet" type="text/css" href="static/css/admin.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/changepwd.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/help.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/usermgmt.css"/>
     <script type="text/javascript" src="static/js/admin.js"></script>
     <script type="text/javascript" src="static/js/common.js"></script>
     <script type="text/javascript" src="static/js/jquery.js"></script>
@@ -29,38 +30,29 @@
 <main id="adminmain">
     <aside id="mainaside">
         <details class="menu" open>
-            <summary>虚拟机管理</summary>
+            <summary>数据中心</summary>
             <ul>
-                <li><a href="#">新建虚拟机</a></li>
-                <li><a href="#">刷新状态</a></li>
-                <li><a href="#">设置引擎</a></li>
-            </ul>
-        </details>
-        <details class="menu" open>
-            <summary>存储管理</summary>
-            <ul>
-                <li><a href="#">新建存储</a></li>
-                <li><a href="#">健康检查</a></li>
-            </ul>
-        </details>
-        <details class="menu" open>
-            <summary>网络管理</summary>
-            <ul>
-                <li><a href="#">新建网络</a></li>
-                <li><a href="#">划分VLAN</a></li>
-            </ul>
-        </details>
-        <details class="menu" open>
-            <summary>用户管理</summary>
-            <ul>
-                <li><a href="#">新建用户</a></li>
+                <li><a href="#">虚拟机管理</a></li>
+                <li><a href="#">存储管理</a></li>
+                <li><a href="#">网络管理</a></li>
+                <li><a id="usermgmt" href="#user">用户管理</a></li>
             </ul>
         </details>
         <details class="menu" open>
             <summary>系统配置</summary>
             <ul>
-                <li><a id="chagepassword" href="#">修改密码</a></li>
-                <li><a id="help" href="#">帮助</a></li>
+                <li><a href="#">环境检查</a></li>
+                <li><a href="#">基本配置</a></li>
+                <li><a id="chagepassword" href="#changepwd">修改密码</a></li>
+            </ul>
+        </details>
+        <details class="menu" open>
+            <summary>帮助</summary>
+            <ul>
+                <li><a href="#">使用手册</a></li>
+                <li><a href="#">参考资料</a></li>
+                <li><a href="#">工具下载</a></li>
+                <li><a id="help" href="#help">联系我们</a></li>
             </ul>
         </details>
     </aside>
@@ -70,6 +62,7 @@
 <div class="clear"></div>
 <footer id="adminfooter">
     <span id="copyright">版权：开发者所有，可供个人研究与学习，严禁商业传播</span>
+
     <div class="clear"></div>
     <span id="addr">2016, Beijing</span>
 </footer>
