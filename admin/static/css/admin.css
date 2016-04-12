@@ -18,7 +18,7 @@ body {
     /*background-color : #FF0000;*/
     border-style: solid;
     height: 78px;
-    width: 100;
+    width: 100%;
     font-family: serif;
 }
 
@@ -44,13 +44,14 @@ body {
 
 #currentuser {
     float: right;
-    width: 200px;
+    width: 120px;
     height: auto;
+    margin-right: 5px;
 }
 
 #logout {
     float: right;
-    width: 100px;
+    width: 50px;
     auto: auto;
 }
 
@@ -61,21 +62,22 @@ a {
 #adminmain {
     height: auto;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 #mainaside {
     width: 15%;
-    height: 600px;
+    height: auto;
     margin-left: 5px;
     margin-top: 5px;
+    /*border:1px solid #ccc;*/
     font-family: 'microsoft YaHei';
     float: left;
 }
 
 #mainsession {
     width: 83%;
-    height: 600px;
+    height: auto;
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -153,6 +155,9 @@ a {
 }
 
 #adminfooter {
+    position:fixed;
+    bottom:0px;
+    width: 100%;
     color: #FFFFFF;
     height: 50px;
     border: 2px;

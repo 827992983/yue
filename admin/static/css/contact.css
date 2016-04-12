@@ -1,18 +1,14 @@
-#div_help {
+#div_contact {
     color: #1d3c41;
     border: 2px;
     margin-left: 20px;
     margin-top: 20px;
     margin-right: 2px;
-    margin-bottom: 2px;
+    margin-bottom: 20px;
     font-size: 15px;
 }
 
-.span_help{
+#div_contact span {
     font-weight: 500;
-}
-
-#introduction_info {
-    float: left;
     margin: 10px;
 }

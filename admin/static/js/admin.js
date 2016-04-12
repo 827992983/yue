@@ -1,6 +1,7 @@
 window.onload = adminOnload
 
 function adminOnload() {
+    layout()
     document.getElementById('logout').onclick = function () {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -24,7 +25,7 @@ function adminOnload() {
     }
 
     document.getElementById('chagepassword').onclick = changePassword;
-    document.getElementById("help").onclick = adminHelp;
+    document.getElementById("contact").onclick = contact;
     document.getElementById("usermgmt").onclick = userMgmt;
 
     var currUrl = window.location.toString();
@@ -32,8 +33,8 @@ function adminOnload() {
     var action = currUrl.substring(index, currUrl.length);
     if (action == "#changepwd") {
         changePassword();
-    } else if (action == "#help") {
-        adminHelp();
+    } else if (action == "#contact") {
+        contact();
     } else if (action == "#user") {
         userMgmt();
     } else {
@@ -104,13 +105,17 @@ function changePassword() {
     );
 }
 
-function adminHelp() {
+function contact() {
     $.ajax({
         async: false,
-        url: "static/html/adminhelp.html",
+        url: "static/html/contact.html",
         dataType: "text",
         success: function (result) {
             document.getElementById("mainsession").innerHTML = result;
         }
     });
+}
+
+function layout(){
+
 }
