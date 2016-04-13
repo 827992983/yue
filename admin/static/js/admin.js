@@ -51,6 +51,66 @@ function userMgmt() {
             document.getElementById("mainsession").innerHTML = result;
         }
     });
+
+    $.ajax({
+        async: false,
+        url: "/users",
+        dataType: "json",
+        success: function (result) {
+            document.getElementById("table_user");
+            if (result.status == 0) {
+                var table = document.getElementById("table_user");
+                var i = 0;
+                var data = result.data;
+                for (i = 0; i < data.length; i++) {
+                    var tr = document.createElement("tr");
+                    table.appendChild(tr)
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    tr.appendChild(td);
+                    var chkbox = document.createElement("input");
+                    chkbox.setAttribute("type", "checkbox");
+                    chkbox.setAttribute("name", "select_user");
+                    td.appendChild(chkbox);
+                    var span = document.createElement("span");
+                    span.innerHTML = "&nbsp;&nbsp;&nbsp;" + i.toString()
+                    td.appendChild(span)
+
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].name;
+                    tr.appendChild(td);
+
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].identify;
+                    tr.appendChild(td);
+
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].email;
+                    tr.appendChild(td);
+
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].phone;
+                    tr.appendChild(td);
+
+                    var td = document.createElement('td');
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].department;
+                    tr.appendChild(td);
+                }
+            } else {
+                alert("获取用户信息失败！")
+            }
+        }
+    });
+    document.getElementById("createuser").onclick = createUser;
+}
+
+function createUser() {
+
 }
 
 function changePassword() {
@@ -116,6 +176,6 @@ function contact() {
     });
 }
 
-function layout(){
+function layout() {
 
 }

@@ -67,10 +67,11 @@ def users(request):
             elem['phone'] = user.phone
             elem['department'] = user.department
             data.append(elem)
+            elem = {} #must be clear elem
 
         ret = {'status':0, 'msg':'get all user succeed', 'data': data}
         return HttpResponse(json.dumps(ret))
     except:
         pass
     ret = {'status':1003, 'msg':'get all user succeed', data: {}}
-    return HttpResponse()
+    return HttpResponse(json.dumps(ret))

@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^logout', login_views.logout, name='logout'),
     url(r'^admin', admin_views.index, name='admin'),
     url(r'^changepwd', admin_views.changepwd, name='changepwd'),
-    url(r'^', login_views.users, name='users'),
+    url(r'^users', login_views.users, name='users'),
     url(r'^guest', guest_views.index, name='guest'),
     url(r'^api', api_views.index),
     url(r'^index', login_views.index, name='index'),
