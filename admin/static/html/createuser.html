@@ -4,20 +4,18 @@
 
         <h5>新建用户</h5>
     </div>
-    <div class="theme-popbod">
-        <form id="form_create_user">
-            <label class="label_create_user">用户名：</label><input class="input_create_user" name="name" type="text"/>
-
-            <div class="clear"></div>
-            <label class="label_create_user">密码：</label><input class="input_create_user" name="password"
-                                                               type="password"/>
-
-            <div class="clear"></div>
-            <label class="label_create_user">确认密码：</label><input class="input_create_user" name="confirm"
-                                                                 type="password"/>
-
-            <div class="clear"></div>
-            <input id="submit_create_user" type="button" value="确认"/>
+    <div class="theme-popbod dform">
+        <form class="theme-signin" name="loginform" action="" method="post">
+            <ol>
+                <li><h4>用户基本信息：</h4></li>
+                <li><label>用户名：</label><input class="ipt" type="text" name="name" value="" size="20"/></li>
+                <li><label>密码：</label><input class="ipt" type="password" name="password" value="" size="20"/></li>
+                <li><label>确认密码：</label><input class="ipt" type="password" name="confirm" value="" size="20"/></li>
+                <li><label>邮箱：</label><input class="ipt" type="email" name="email" value="" size="20"/></li>
+                <li><label>手机：</label><input class="ipt" type="text" name="phone" value="" size="20"/></li>
+                <li><label>部门：</label><input class="ipt" type="text" name="department" value="" size="20"/></li>
+                <li><input id="btn_create_user" class="btn btn-primary" type="button" name="submit" value=" 确 认 "/></li>
+            </ol>
         </form>
     </div>
 </div>
