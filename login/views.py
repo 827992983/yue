@@ -54,3 +54,23 @@ def logout(request):
     except:
         pass
     return response
+
+def users(request):
+    try:
+        data = []
+        elem = {}
+        all = User.objects.all()
+        for user in all:
+            elem['name'] = user.name
+            elem['identify'] = user.identify
+            elem['email'] = user.email
+            elem['phone'] = user.phone
+            elem['department'] = user.department
+            data.append(elem)
+
+        ret = {'status':0, 'msg':'get all user succeed', 'data': data}
+        return HttpResponse(json.dumps(ret))
+    except:
+        pass
+    ret = {'status':1003, 'msg':'get all user succeed', data: {}}
+    return HttpResponse()

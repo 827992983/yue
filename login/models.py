@@ -13,6 +13,9 @@ class User(models.Model):
     name = models.CharField(max_length=20, primary_key=True)
     password = models.CharField(max_length=20)
     identify = models.CharField(max_length=20)
+    email = models.CharField(max_length=20, default='')
+    phone = models.CharField(max_length=20, default='')
+    department = models.CharField(max_length=20,default='')
 
     def __unicode__(self):
         return self.name
