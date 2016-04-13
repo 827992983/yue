@@ -1,3 +1,4 @@
+/*This is UserList*/
 #nav_user {
     background: #DFE1DB;
     border: 1px solid #ccc;
@@ -36,7 +37,7 @@ table {
     box-shadow: 0 1px 1px #ccc;
 }
 
-#table_user thead{
+#table_user thead {
     background: #EEE;
 }
 
@@ -103,4 +104,46 @@ table {
     -moz-border-radius: 0 0 6px 0;
     -webkit-border-radius: 0 0 6px 0;
     border-radius: 0 0 6px 0;
+}
+
+/*This is Create User*/
+
+.theme-popover {
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 660px;
+    height: 360px;
+    margin: -180px 0 0 -330px;
+    border-radius: 5px;
+    border: solid 2px #666;
+    background-color: #fff;
+    display: none;
+    box-shadow: 0 0 10px #666;
+}
+
+.theme-poptit {
+    border-bottom: 1px solid #ddd;
+    padding: 12px;
+    position: relative;
+}
+
+.theme-popbod {
+    padding: 60px 15px;
+    color: #444;
+    height: 148px;
+}
+
+.theme-poptit .close {
+    float: right;
+    color: #999;
+    padding: 5px;
+    margin: -2px -5px -5px;
+    font: bold 14px/14px simsun;
+    text-shadow: 0 1px 0 #ddd
+}
+
+.theme-poptit .close:hover {
+    color: #444;
 }

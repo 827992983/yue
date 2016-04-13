@@ -109,7 +109,25 @@ function userMgmt() {
     document.getElementById("createuser").onclick = createUser;
 }
 
+
 function createUser() {
+    $.ajax({
+        async: false,
+        url: "static/html/createuser.html",
+        dataType: "text",
+        success: function (result) {
+            var node = document.getElementById("mainsession");
+            var div = document.createElement("div");
+            div.innerHTML = result;
+            node.appendChild(div);
+            $('.theme-popover-mask').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+        }
+    });
 
 }
 
