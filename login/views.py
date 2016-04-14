@@ -108,3 +108,47 @@ def create_user(request):
 
     ret = {'status':1008, 'msg':'create user error', 'data': {}}
     return HttpResponse(json.dumps(ret))
+
+def delete_user(request):
+    try:
+        ret = {'status':0, 'msg':'delete user success', 'data': {}}
+        if request.method == 'POST':
+            print request.body
+            form = json.loads(request.body)
+            print form
+            for username in form:
+                userinfo = User.objects.filter(name=username)
+                if userinfo == None or len(userinfo) == 0:
+                    ret = {'status':1009, 'msg':'user is not exist', 'data': {}}
+                    return HttpResponse(json.dumps(ret))
+                User.objects.filter(name=username).delete()
+
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+
+    ret = {'status':1010, 'msg':'delete user error', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def edit_user(request):
+    try:
+        ret = {'status':0, 'msg':'edit user success', 'data': {}}
+        if request.method == 'POST':
+            print request.body
+            form = json.loads(request.body)
+            print form
+            userinfo = User.objects.filter(name=form['name'])[0]
+            if userinfo == None and len(userinfo) == 0:
+                ret = {'status':1011, 'msg':'user is not exist', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+
+            userinfo.email = form['email']
+            userinfo.department = form['department']
+            userinfo.phone = form['phone']
+            userinfo.save()
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+
+    ret = {'status':1012, 'msg':'create user error', 'data': {}}
+    return HttpResponse(json.dumps(ret))

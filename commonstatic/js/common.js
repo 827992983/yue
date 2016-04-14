@@ -21,3 +21,18 @@ function getCookie(c_name) {
     }
     return ""
 }
+
+function emailCheck(email) {
+    var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+    if (!pattern.test(email)) {
+        return false;
+    }
+    return true;
+}
+
+function checkPhone(phone) {
+    if (!(/^1[3|4|5|7|8]\d{9}$/.test(phone))) {
+        return false;
+    }
+    return true;
+}

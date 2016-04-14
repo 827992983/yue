@@ -30,6 +30,8 @@ urlpatterns = [
     url(r'^changepwd', admin_views.changepwd, name='changepwd'),
     url(r'^users', login_views.users, name='users'),
     url(r'^user/create', login_views.create_user, name='create_user'),
+    url(r'^user/delete', login_views.delete_user, name='delete_user'),
+    url(r'^user/edit', login_views.edit_user, name='edit_user'),
     url(r'^guest', guest_views.index, name='guest'),
     url(r'^api', api_views.index),
     url(r'^index', login_views.index, name='index'),

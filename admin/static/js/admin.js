@@ -64,8 +64,11 @@ function userMgmt() {
                 var data = result.data;
                 for (i = 0; i < data.length; i++) {
                     var tr = document.createElement("tr");
+                    tr.setAttribute("name", "tr_user");
                     table.appendChild(tr)
+
                     var td = document.createElement('td');
+                    td.setAttribute("name", "td_number");
                     td.setAttribute("class", "td_user_title");
                     tr.appendChild(td);
                     var chkbox = document.createElement("input");
@@ -77,6 +80,7 @@ function userMgmt() {
                     td.appendChild(span)
 
                     var td = document.createElement('td');
+                    td.setAttribute("name", "td_username");
                     td.setAttribute("class", "td_user_title");
                     td.innerHTML = data[i].name;
                     tr.appendChild(td);
@@ -107,6 +111,8 @@ function userMgmt() {
         }
     });
     document.getElementById("createuser").onclick = createUser;
+    document.getElementById("deleteuser").onclick = deleteUser;
+    document.getElementById("edituser").onclick = editUser;
 }
 
 
@@ -138,6 +144,32 @@ function createUser() {
             jsondata.email = document.getElementsByName("email")[0].value;
             jsondata.phone = document.getElementsByName("phone")[0].value;
             jsondata.department = document.getElementsByName("department")[0].value;
+            if (jsondata.name.length < 1) {
+                alert("用户名不能为空!");
+                return;
+            }
+
+            if (jsondata.password.length < 6 || jsondata.confirm.length < 6) {
+                alert("密码必须大于等于6位!");
+                return;
+            }
+
+            if (jsondata.password != jsondata.confirm) {
+                alert("密码不一致！");
+                return;
+            }
+
+            if (jsondata.email.length > 0 && !emailCheck(jsondata.email)) {
+                alert("邮箱格式不正确！");
+                return;
+            }
+
+            if (jsondata.phone.length > 0 && !checkPhone(jsondata.phone)
+                ) {
+                alert("手机号码格式不正确！");
+                return;
+            }
+
             $.ajax({
                 async: false,
                 url: "/user/create",
@@ -145,14 +177,156 @@ function createUser() {
                 data: JSON.stringify(jsondata),
                 dataType: "json",
                 success: function (result) {
-                    alert(result.status)
+                    if (result.status == 0) {
+                        //alert("用户创建成功！");
+                        $('.theme-popover-mask').fadeOut(100);
+                        $('.theme-popover').slideUp(200);
+                        window.location.reload();
+                    } else {
+                        alert("用户创建失败");
+                    }
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
                 }
             });
         }
-    )
+    );
+}
+
+function getSelectedUser() {
+    var list = document.getElementsByName("tr_user");
+    var i = 0;
+    var ret = new Array();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            //if user is selected, get username
+            var username = list[i].childNodes[1].innerHTML;
+            ret.push(username);
+        }
+    }
+
+    return ret;
+}
+
+function deleteUser() {
+    var ret = getSelectedUser();
+
+    for (var i in ret) {
+        if (ret[i] == "admin") {
+            alert("不能删除admin账号！");
+            return;
+        }
+    }
+
+    $.ajax({
+        async: false,
+        url: "/user/delete",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("删除用户失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
+}
+
+function getSelectedUserInfo() {
+    var list = document.getElementsByName("tr_user");
+    var i = 0;
+    var data = new Object();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            //if user is selected, get username
+            var val = list[i].childNodes[1].innerHTML;
+            data.name = val;
+            val = list[i].childNodes[2].innerHTML;
+            data.email = val;
+            val = list[i].childNodes[3].innerHTML;
+            data.email = val;
+            val = list[i].childNodes[4].innerHTML;
+            data.phone = val;
+            val = list[i].childNodes[5].innerHTML;
+            data.department = val;
+        }
+    }
+
+    return data;
+}
+
+function editUser() {
+    var ret = getSelectedUser();
+    if (ret.length == 0) {
+        alert("请选择一个用户进行编辑！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("仅仅能选择一个用户进行编辑！");
+        return;
+    }
+
+    var jsondata = getSelectedUserInfo();
+
+    $.ajax({
+        async: false,
+        url: "static/html/edituser.html",
+        dataType: "text",
+        success: function (result) {
+            var node = document.getElementById("mainsession");
+            var div = document.createElement("div");
+            div.innerHTML = result;
+            node.appendChild(div);
+            $('.theme-popover-mask').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+            document.getElementsByName("email")[0].value = jsondata.email;
+            document.getElementsByName("phone")[0].value = jsondata.phone;
+            document.getElementsByName("department")[0].value = jsondata.department;
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+        }
+    });
+
+    $("#btn_edit_user").click(function () {
+        jsondata.email = document.getElementsByName("email")[0].value;
+        jsondata.phone = document.getElementsByName("phone")[0].value;
+        jsondata.department = document.getElementsByName("department")[0].value;
+        if (jsondata.email.length > 0 && !emailCheck(jsondata.email)) {
+            alert("邮箱格式不正确！");
+            return;
+        }
+
+        if (jsondata.phone.length > 0 && !checkPhone(jsondata.phone)
+            ) {
+            alert("手机号码格式不正确！");
+            return;
+        }
+        $.ajax({
+            async: false,
+            url: "/user/edit",
+            method: "POST",
+            data: JSON.stringify(jsondata),
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 0) {
+                    window.location.reload();
+                } else {
+                    alert("修改用户信息失败！");
+                }
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+            }
+        });
+    })
 }
 
 function changePassword() {
