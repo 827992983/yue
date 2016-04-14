@@ -73,5 +73,38 @@ def users(request):
         return HttpResponse(json.dumps(ret))
     except:
         pass
-    ret = {'status':1003, 'msg':'get all user succeed', data: {}}
+    ret = {'status':1003, 'msg':'get all user failed', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def create_user(request):
+    try:
+        ret = {'status':0, 'msg':'create user success', 'data': {}}
+        if request.method == 'POST':
+            print request.body
+            form = json.loads(request.body)
+            print form
+            userinfo = User.objects.filter(name=form['name'])
+            if userinfo != None and len(userinfo) > 0:
+                ret = {'status':1004, 'msg':'user have exist', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+
+            if(form['name'] == None or len(form['name'])<1):
+                ret = {'status':1005, 'msg':'username can not be Null', 'data': {}}
+
+            if(form['password'] == None or len(form['password'])<6):
+                ret = {'status':1006, 'msg':'password length > 6', 'data': {}}
+
+            if(form['confirm'] == None or form['password'] != form['confirm']):
+                ret = {'status':1007, 'msg':' password is not same', 'data': {}}
+
+            if ret['status'] > 0:
+                return HttpResponse(json.dumps(ret))
+
+            user = User(name=form['name'], password=form['password'], identify=form['identify'], email=form['email'], phone=form['phone'], department=form['department'])
+            user.save()
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+
+    ret = {'status':1008, 'msg':'create user error', 'data': {}}
     return HttpResponse(json.dumps(ret))

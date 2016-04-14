@@ -129,6 +129,30 @@ function createUser() {
         }
     });
 
+    $("#btn_create_user").click(function () {
+            var jsondata = new Object();
+            jsondata.name = document.getElementsByName("name")[0].value;
+            jsondata.password = document.getElementsByName("password")[0].value;
+            jsondata.identify = "user"; //maybe need to change
+            jsondata.confirm = document.getElementsByName("confirm")[0].value;
+            jsondata.email = document.getElementsByName("email")[0].value;
+            jsondata.phone = document.getElementsByName("phone")[0].value;
+            jsondata.department = document.getElementsByName("department")[0].value;
+            $.ajax({
+                async: false,
+                url: "/user/create",
+                method: "POST",
+                data: JSON.stringify(jsondata),
+                dataType: "json",
+                success: function (result) {
+                    alert(result.status)
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+                }
+            });
+        }
+    )
 }
 
 function changePassword() {

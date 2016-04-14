@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^admin', admin_views.index, name='admin'),
     url(r'^changepwd', admin_views.changepwd, name='changepwd'),
     url(r'^users', login_views.users, name='users'),
+    url(r'^user/create', login_views.create_user, name='create_user'),
     url(r'^guest', guest_views.index, name='guest'),
     url(r'^api', api_views.index),
     url(r'^index', login_views.index, name='index'),
