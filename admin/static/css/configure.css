@@ -1,0 +1,18 @@
+.div_config {
+    font-size: 12px;
+    padding: 12px;
+    position: relative;
+    border: 1px solid #ccc;
+}
+
+.label_config {
+    margin-left: 5px;
+    width: 100px;
+    text-align: right;
+    line-height: 18px;
+    font-size: 12px;
+}
+
+.select_config {
+    width: 100px;
+}

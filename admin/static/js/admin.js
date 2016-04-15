@@ -27,6 +27,7 @@ function adminOnload() {
     document.getElementById('chagepassword').onclick = changePassword;
     document.getElementById("contact").onclick = contact;
     document.getElementById("usermgmt").onclick = userMgmt;
+    document.getElementById("configure").onclick = configure;
 
     var currUrl = window.location.toString();
     var index = currUrl.indexOf("#", 0);
@@ -37,8 +38,8 @@ function adminOnload() {
         contact();
     } else if (action == "#user") {
         userMgmt();
-    } else {
-
+    } else if (action == "#configure") {
+        configure();
     }
 }
 
@@ -379,6 +380,19 @@ function changePassword() {
             }
         }
     );
+}
+
+function configure() {
+    $.ajax({
+        async: false,
+        url: "static/html/configure.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+
+
 }
 
 function contact() {
