@@ -10,7 +10,8 @@ import logging
 # Configuration file definitions
 #
 SYSCONF_PATH = '/etc'
-LOG_PATH='/var/log/yue.log'
+#LOG_PATH='/var/log/yue.log'
+LOG_PATH='/tmp/yue.log'
 LOG_LEVEL=logging.DEBUG
 
 #

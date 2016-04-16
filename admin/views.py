@@ -10,8 +10,8 @@ def index(request):
     return render(request, 'admin.html')
 
 def checkenv(request):
-    os = sysconfig.getOsVersion()
-    return HttpResponse(os)
+    ret = sysconfig.isVirtEnhance()
+    return HttpResponse(ret)
 
 def configure(request):
     try:
