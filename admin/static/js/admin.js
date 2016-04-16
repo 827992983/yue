@@ -28,6 +28,8 @@ function adminOnload() {
     document.getElementById("contact").onclick = contact;
     document.getElementById("usermgmt").onclick = userMgmt;
     document.getElementById("configure").onclick = configure;
+    document.getElementById("checkenv").onclick = checkEnv;
+
 
     var currUrl = window.location.toString();
     var index = currUrl.indexOf("#", 0);
@@ -40,7 +42,7 @@ function adminOnload() {
         userMgmt();
     } else if (action == "#configure") {
         configure();
-    }else if(action == "#checkenv"){
+    } else if (action == "#checkenv") {
         checkEnv();
     }
 }
@@ -417,7 +419,7 @@ function configure() {
                     selected.add(new Option("spice"))
                 }
             } else {
-                alert("设置失败！");
+                alert("获取配置信息失败！");
             }
         }
     });
@@ -434,22 +436,32 @@ function configure() {
             jsondata.display = value;
             $.ajax({
                 url: "configure",
-                method:"POST",
+                method: "POST",
                 data: JSON.stringify(jsondata),
                 dataType: "json",
                 beforeSend: function (request) {
                     request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
                 },
                 success: function (result) {
-                    if(result.status == 0){
+                    if (result.status == 0) {
                         alert("配置成功！")
-                    }else{
+                    } else {
                         alert("配置失败！")
                     }
                 }
             });
         }
     );
+}
+
+function checkEnv() {
+    $.get({
+        url: "static/html/checkenv.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
 }
 
 function contact() {

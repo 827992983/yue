@@ -1,0 +1,23 @@
+.fieldset_checkenv {
+    font-size: 12px;
+    margin-top: 30px;
+    margin-left: 120px;
+    margin-bottom: 30px;
+    padding: 12px;
+    position: relative;
+    border: 1px solid #ccc;
+    width: 500px;
+}
+
+.legend_checkenv {
+    width: 500px;
+}
+
+.fieldset_checkenv li{
+    list-style: none;
+    margin-left: 30px;
+}
+
+.fieldset_checkenv progress{
+    width: 200px;
+}
