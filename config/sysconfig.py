@@ -34,8 +34,39 @@ def isVirtEnhance():
     ret = "no"
     try:
         out, err, code = utils.execShellCommand("egrep '(vmx|svm)' /proc/cpuinfo |wc -l ")
-        if(int(out) > 0):
+        if (int(out) > 0):
             ret = 'yes'
+    except:
+        pass
+    return ret
+
+
+def getKvmVersion(engine):
+    ret = "unknown"
+    try:
+        if engine == "qemu-kvm":
+            out, err, code = utils.execShellCommand("rpm -qa|grep qemu-kvm")
+        elif engine == "qemu-system-x86_64":
+            out, err, code = utils.execShellCommand("qemu-system-x86_64 --version")
+        else:
+            pass
+    except:
+        pass
+    return ret
+
+
+def getSpiceVersion():
+    ret = "unknown"
+    try:
+        ret, err, code = utils.execShellCommand("rpm -qa|grep qemu-kvm")
+    except:
+        pass
+    return ret
+
+def getUsbredirVersion():
+    ret = "unknown"
+    try:
+        ret, err, code = utils.execShellCommand("rpm -qa|grep usbredir")
     except:
         pass
     return ret

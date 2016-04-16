@@ -10,21 +10,29 @@ def index(request):
     return render(request, 'admin.html')
 
 def checkenv(request):
-    ret = sysconfig.isVirtEnhance()
-    return HttpResponse(ret)
+    ret = {'status':0, 'msg':'configure success', 'data': {}}
+    data = {}
+    try:
+        data['kernel'] = sysconfig.getKernelVersion()
+        data['os'] = sysconfig.getOsVersion()
+        data['vtx'] = sysconfig.isVirtEnhance()
+        engine = Configure.objects.get(key='engine').value
+        data['kvm'] = sysconfig.getKvmVersion(engine)
+        data['spice'] = sysconfig.getSpiceVersion()
+        ret['data'] = data
+    except:
+        pass
+    return HttpResponse(json.dumps(ret))
 
 def configure(request):
     try:
         ret = {'status':0, 'msg':'configure success', 'data': {}}
         if request.method == "GET":
-            print 1
             engine = Configure.objects.get(key='engine')
             display = Configure.objects.get(key='display')
-            print 2
             data = {}
             data['engine'] = engine.value
             data['display'] = display.value
-            print 3
             ret['data'] = data
             return HttpResponse(json.dumps(ret))
         elif request.method == "POST":
@@ -43,18 +51,14 @@ def configure(request):
 def changepwd(request):
     try:
         if request.method == "POST":
-            print request.body
             form = json.loads(request.body)
             username = request.COOKIES['username']
-            print username
             userinfo = User.objects.filter(name=username)
 
             if userinfo == None or len(userinfo) != 1:
                 ret = {'status': 1011, 'msg': 'invalid username', 'data': {}}
-                print 2
                 return HttpResponse(json.dumps(ret))
 
-            print userinfo[0].password
             if userinfo[0].password == form['old'].strip() and form['new'].strip() == form['confirm'].strip():
                 ret = {'status': 0, 'msg': 'succeed', 'data': {}}
                 userinfo[0].password = form['new'].strip()
