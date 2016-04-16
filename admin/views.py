@@ -3,10 +3,15 @@ from django.http import HttpResponse
 import json
 from login.models import User
 from .models import Configure
+from config import sysconfig
 # Create your views here.
 
 def index(request):
     return render(request, 'admin.html')
+
+def checkenv(request):
+    os = sysconfig.getOsVersion()
+    return HttpResponse(os)
 
 def configure(request):
     try:
