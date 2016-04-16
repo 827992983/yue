@@ -1,3 +1,4 @@
+
 .div_config {
     font-size: 12px;
     padding: 12px;
@@ -5,14 +6,35 @@
     border: 1px solid #ccc;
 }
 
+#form_config {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 22px;
+}
+
 .label_config {
-    margin-left: 5px;
+    position: relative;
     width: 100px;
     text-align: right;
     line-height: 18px;
     font-size: 12px;
+    float: left;
 }
 
 .select_config {
-    width: 100px;
+    position: relative;
+    width: 150px;
+    text-align: right;
+    line-height: 18px;
+    font-size: 12px;
+    float: left;
 }
+
+.temp_config{
+    margin-bottom: 20px;
+}
+
+#btn_configure{
+    margin-left: 150px;
+}
+

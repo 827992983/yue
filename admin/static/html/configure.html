@@ -1,21 +1,23 @@
 <div class="div_config">
-    <form class="form_config">
-        <label class="label_config">虚拟化引擎：</label>
-        <select class="select_config">
-            <option>qemu-kvm</option>
-            <option>qemu-system_x86_64</option>
-        </select>
-    </form>
-</div>
+    <form id="form_config">
+        <div class="config_tmp">
+            <label class="label_config">虚拟化引擎：</label>
+            <select id="config_engine" class="select_config">
+            </select>
+        </div>
 
-<div class="clear"></div>
+        <div class="clear"></div>
+        <div class="temp_config"></div>
 
-<div class="div_config">
-    <form class="form_config">
-        <label class="label_config">远程协议：</label>
-        <select class="select_config">
-            <option>Spice</option>
-            <option>RDP</option>
-        </select>
+        <div class="config_tmp">
+            <label class="label_config">远程桌面协议：</label>
+            <select id="config_display" class="select_config">
+            </select>
+        </div>
+
+        <div class="clear"></div>
+        <div class="temp_config"></div>
+
+        <input id="btn_configure" type="button" value=" 确 定 "/>
     </form>
 </div>

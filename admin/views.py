@@ -2,11 +2,38 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 from login.models import User
+from .models import Configure
 # Create your views here.
 
 def index(request):
     return render(request, 'admin.html')
 
+def configure(request):
+    try:
+        ret = {'status':0, 'msg':'configure success', 'data': {}}
+        if request.method == "GET":
+            print 1
+            engine = Configure.objects.get(key='engine')
+            display = Configure.objects.get(key='display')
+            print 2
+            data = {}
+            data['engine'] = engine.value
+            data['display'] = display.value
+            print 3
+            ret['data'] = data
+            return HttpResponse(json.dumps(ret))
+        elif request.method == "POST":
+            form = json.loads(request.body)
+            Configure.objects.filter(key='engine').update(value=form['engine'])
+            Configure.objects.filter(key='display').update(value=form['display'])
+            return HttpResponse(json.dumps(ret))
+        else:
+            pass
+    except:
+        pass
+
+    ret = {'status': 2001, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
 
 def changepwd(request):
     try:
@@ -27,7 +54,6 @@ def changepwd(request):
                 ret = {'status': 0, 'msg': 'succeed', 'data': {}}
                 userinfo[0].password = form['new'].strip()
                 userinfo[0].save()
-                print 3
                 return HttpResponse(json.dumps(ret))
     except:
         pass

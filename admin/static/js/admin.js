@@ -40,6 +40,8 @@ function adminOnload() {
         userMgmt();
     } else if (action == "#configure") {
         configure();
+    }else if(action == "#checkenv"){
+        checkEnv();
     }
 }
 
@@ -392,7 +394,62 @@ function configure() {
         }
     });
 
+    $.get({
+        url: "configure",
+        dataType: "json",
+        success: function (result) {
+            //var data = eval("(" + request.data + ")");
+            if (result.status == 0) {
+                var selected = document.getElementById("config_engine");
+                if (result.data.engine == "qemu-kvm") {
+                    selected.add(new Option(result.data.engine))
+                    selected.add(new Option("qemu-system-x86_64"))
+                } else if (result.data.engine == "qemu-system-x86_64") {
+                    selected.add(new Option(result.data.engine))
+                    selected.add(new Option("qemu-kvm"))
+                }
+                selected = document.getElementById("config_display");
+                if (result.data.display == "spice") {
+                    selected.add(new Option(result.data.display))
+                    selected.add(new Option("RDP"))
+                } else if (result.data.display == "RDP") {
+                    selected.add(new Option(result.data.display))
+                    selected.add(new Option("spice"))
+                }
+            } else {
+                alert("设置失败！");
+            }
+        }
+    });
 
+    $("#btn_configure").click(function () {
+            var jsondata = new Object();
+            var selected = document.getElementById("config_engine");
+            var index = selected.selectedIndex;
+            var value = selected.options[index].value;
+            jsondata.engine = value;
+            selected = document.getElementById("config_display");
+            index = selected.selectedIndex;
+            value = selected.options[index].value;
+            jsondata.display = value;
+            $.ajax({
+                url: "configure",
+                method:"POST",
+                data: JSON.stringify(jsondata),
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+                },
+                success: function (result) {
+                    if(result.status == 0){
+                        alert("配置成功！")
+                    }else{
+                        alert("配置失败！")
+                    }
+                }
+            });
+        }
+    );
 }
 
 function contact() {
