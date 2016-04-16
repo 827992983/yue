@@ -36,3 +36,23 @@ function checkPhone(phone) {
     }
     return true;
 }
+
+function sleep(seconds) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            try {
+                var ret = xhr.responseText;
+                var data = eval("(" + ret + ")");
+                if (data.status == 0) {
+                    return true;
+                }
+            } catch (e) {
+                return false;
+            }
+        }
+    }
+    xhr.open('GET', '/sleep', false);
+    xhr.send();
+    return false
+}

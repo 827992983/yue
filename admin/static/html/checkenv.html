@@ -3,19 +3,11 @@
     <ul>
         <li>
             <label>CPU：</label>
-            <progress max="100" value="30"></progress>
+            <progress id="checkenv_cpu" max="100" value="20"></progress>
         </li>
         <li>
             <label>内存：</label>
-            <progress max="100" value="30"></progress>
-        </li>
-        <li>
-            <label>磁盘：</label>
-            <progress max="100" value="30"></progress>
-        </li>
-        <li>
-            <label>网络：</label>
-            <progress max="100" value="30"></progress>
+            <progress id="checkenv_memory" max="100" value="50"></progress>
         </li>
     </ul>
 </fieldset>
@@ -25,11 +17,11 @@
     <ul>
         <li>
             <label>操作系统：</label>
-            <span></span>
+            <span id="checkenv_os"></span>
         </li>
         <li>
             <label>内核版本：</label>
-            <span></span>
+            <span id="checkenv_kernel"></span>
         </li>
     </ul>
 </fieldset>
@@ -39,16 +31,16 @@
     <legend>虚拟化环境：</legend>
     <ul>
         <li>
-            <label>虚拟化加速：</label>
-            <span></span>
+            <label>Intel VTx / AMD-v：</label>
+            <span id="checkenv_virtenhance"></span>
         </li>
         <li>
             <label>qemu版本：</label>
-            <span></span>
+            <span id="checkenv_kvm"></span>
         </li>
         <li>
             <label>spice版本：</label>
-            <span></span>
+            <span id="checkenv_spice"></span>
         </li>
     </ul>
 </fieldset>

@@ -1,5 +1,7 @@
 window.onload = adminOnload
 
+var gRefreshEnv = true;
+
 function adminOnload() {
     layout()
     document.getElementById('logout').onclick = function () {
@@ -45,6 +47,7 @@ function adminOnload() {
     } else if (action == "#checkenv") {
         checkEnv();
     }
+
 }
 
 function userMgmt() {
@@ -454,6 +457,44 @@ function configure() {
     );
 }
 
+function getEnv() {
+    $.ajax({
+        url: "/checkenv",
+        method: "GET",
+        async: false,
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            if (result.status == 0) {
+                //alert(JSON.stringify(result));
+                document.getElementById("checkenv_os").innerHTML = result.data.os;
+                document.getElementById("checkenv_kernel").innerHTML = result.data.kernel;
+                document.getElementById("checkenv_virtenhance").innerHTML = result.data.vtx;
+                document.getElementById("checkenv_kvm").innerHTML = result.data.kvm;
+                document.getElementById("checkenv_spice").innerHTML = result.data.spice;
+                document.getElementById("checkenv_cpu").setAttribute("value", String(result.data.cpu))
+                if (result.data.cpu > 70 && result.data.cpu < 90) {
+                    document.getElementById("checkenv_cpu").style.color = "#FFEC8B"
+                }
+                else if (result.data.cpu >= 90) {
+                    document.getElementById("checkenv_cpu").style.color = "#FF3030"
+                }
+                document.getElementById("checkenv_memory").setAttribute('value', String(result.data.memory))
+                if (result.data.memory > 70 && result.data.memory < 90) {
+                    document.getElementById("checkenv_memory").style.color = "#FFEC8B"
+                }
+                else if (result.data.memory >= 90) {
+                    document.getElementById("checkenv_memory").style.color = "#FF3030"
+                }
+            } else {
+                alert("获取系统环境信息失败！")
+            }
+        }
+    });
+}
+
 function checkEnv() {
     $.get({
         url: "static/html/checkenv.html",
@@ -462,6 +503,11 @@ function checkEnv() {
             document.getElementById("mainsession").innerHTML = result;
         }
     });
+
+    if(gRefreshEnv){
+        setInterval(getEnv, 10000);
+        gRefreshEnv = false;
+    }
 }
 
 function contact() {

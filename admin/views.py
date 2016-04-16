@@ -4,13 +4,14 @@ import json
 from login.models import User
 from .models import Configure
 from config import sysconfig
+import time
 # Create your views here.
 
 def index(request):
     return render(request, 'admin.html')
 
 def checkenv(request):
-    ret = {'status':0, 'msg':'configure success', 'data': {}}
+    ret = {'status':0, 'msg':'check environment success', 'data': {}}
     data = {}
     try:
         data['kernel'] = sysconfig.getKernelVersion()
@@ -19,6 +20,8 @@ def checkenv(request):
         engine = Configure.objects.get(key='engine').value
         data['kvm'] = sysconfig.getKvmVersion(engine)
         data['spice'] = sysconfig.getSpiceVersion()
+        data['cpu'] = sysconfig.getCpu()
+        data['memory'] = sysconfig.getMemory()
         ret['data'] = data
     except:
         pass
@@ -68,4 +71,9 @@ def changepwd(request):
         pass
 
     ret = {'status': 1012, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def sleep(seconds):
+    ret = {'status':0}
+    time.sleep(seconds)
     return HttpResponse(json.dumps(ret))
