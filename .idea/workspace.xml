@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b3dc2578-56b4-4dca-b249-12682e194e38" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/html/download.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/html/manual.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/css/network.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/html/network.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/html/reference.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/css/vm.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/admin/static/html/vm.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/admin/static/css/contact.css" afterPath="$PROJECT_DIR$/admin/static/css/help.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/templates/admin.html" afterPath="$PROJECT_DIR$/admin/templates/admin.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/static/js/admin.js" afterPath="$PROJECT_DIR$/admin/static/js/admin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yuelibs/errno.py" afterPath="$PROJECT_DIR$/yuelibs/errno.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/localfs.py" afterPath="$PROJECT_DIR$/storage/localfs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yue/urls.py" afterPath="$PROJECT_DIR$/yue/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/views.py" afterPath="$PROJECT_DIR$/admin/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="b3dc2578-56b4-4dca-b249-12682e194e38" name="Default" comment="" />
     <ignored path="yue.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
