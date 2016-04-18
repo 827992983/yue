@@ -14,7 +14,8 @@ Failed = {'code': 1, 'msg': 'Failed', 'data': {}}
 
 # Storage errno definitions
 #
-ERR_CREATURE_STORAGE = {'code':1001, 'msg':'create storage with error', 'data':[]}
+ERR_CREAT_STORAGE = {'code':3001, 'msg':'create storage with error', 'data':[]}
+ERR_DELETE_STORAGE = {'code':3002, 'msg':'delete storage with error', 'data':[]}
 
 # Network errno definitions
 #

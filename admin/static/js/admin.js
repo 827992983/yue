@@ -32,7 +32,11 @@ function adminOnload() {
     document.getElementById("configure").onclick = configure;
     document.getElementById("checkenv").onclick = checkEnv;
     document.getElementById("storage").onclick = storage;
-
+    document.getElementById("network").onclick = network;
+    document.getElementById("manual").onclick = manual;
+    document.getElementById("reference").onclick = reference;
+    document.getElementById("download").onclick = download;
+    document.getElementById("vm").onclick = vm;
 
     var currUrl = window.location.toString();
     var index = currUrl.indexOf("#", 0);
@@ -49,6 +53,16 @@ function adminOnload() {
         checkEnv();
     } else if (action == "#storage") {
         storage();
+    } else if (action == "#network") {
+        network();
+    } else if (action == "#manual") {
+        manual();
+    } else if (action == "#reference") {
+        reference();
+    } else if (action == "#download") {
+        download();
+    } else if (action == "#vm") {
+        vm();
     }
 
 }
@@ -523,10 +537,60 @@ function storage() {
     });
 }
 
+function network() {
+    $.get({
+        url: "static/html/network.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+}
+
+function vm() {
+    $.get({
+        url: "static/html/vm.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+}
+
 function contact() {
     $.ajax({
         async: false,
         url: "static/html/contact.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+}
+
+function manual() {
+    $.get({
+        url: "static/html/manual.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+}
+
+function reference() {
+    $.get({
+        url: "static/html/reference.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+}
+
+function download() {
+    $.get({
+        url: "static/html/download.html",
         dataType: "text",
         success: function (result) {
             document.getElementById("mainsession").innerHTML = result;

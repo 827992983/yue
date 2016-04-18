@@ -12,8 +12,14 @@ from yuelibs import constants
 from yuelibs import utils
 
 class LocalFsStorage(object):
-    def __init__(self, path='storage'):
-        self.path = os.path.join('/opt/',path)
+    def __init__(self, path='', disk='', mount=''):
+        self.path = path
+        self.delete()
+        self.meta = os.path.join(path, 'meta')
+        self.image = os.path.join(path, 'image')
+        self.template = os.path.join(path, 'template')
+        self.disk = disk
+        self.mount = mount
 
     def create(self):
         try:
@@ -22,20 +28,30 @@ class LocalFsStorage(object):
             else:
                 os.mkdir(self.path, mode=0644)
 
-            image_path = os.path.join(self.path, 'image')
-            template_path = os.path.join(self.path, 'template')
-            disk_path = os.path.join(self.path, 'disk')
-            os.mkdir(image_path)
-            os.mkdir(template_path)
+            if not os.path.exists(self.image):
+                os.mkdir(self.image, mode=0644)
+            if not os.path.exists(self.template):
+                os.mkdir(self.template, mode=0644)
         except:
-            return errno.ERR_CREATURE_STORAGE
-        return self.path
+            return errno.ERR_CREAT_STORAGE
+        return errno.Success
 
     def delete(self):
         try:
-            #virt_engine = utils.getConfigField(
-            #os.system("killall -9 %s" % ())
-            pass
+            if os.path.exists(self.path):
+                os.remove(self.path)
         except:
-            pass
+            return errno.ERR_DELETE_STORAGE
+        return errno.Success
 
+    def getAllSpace(self):
+        pass
+
+    def getFreeSpace(self):
+        pass
+
+    def getDevice(self):
+        pass
+
+    def getMount(self):
+        pass

@@ -3,8 +3,9 @@ from django.http import HttpResponse
 import json
 from login.models import User
 from .models import Configure
+from .models import Storage
 from config import sysconfig
-import time
+from storage import localfs
 # Create your views here.
 
 def index(request):
@@ -73,18 +74,35 @@ def changepwd(request):
     ret = {'status': 1012, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
-def sleep(request):
-    ret = {'status':0}
-    time.sleep(request.GET['seconds'])
-    return HttpResponse(json.dumps(ret))
-
 def storage(request):
-    ret = {'status':0, 'msg':'storage success', 'data': {}}
+    ret = {'status':0, 'msg':'storage operation success', 'data': {}}
+    data = {}
     try:
         if request.method == "GET":
-            pass
+            path = request.GET['path']
+            st = Storage.objects.get(path=path)
+            if st is None or len(st) != 1:
+                ret = {'status':3001, 'msg':'get storage info from db with error', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            data['path'] = st.path
+            data['type'] = st.type
+            data['disk'] = st.disk
+            data['mount'] = st.mount
+            if st.type == 'local':
+                local = localfs.LocalFsStorage(st.path)
+                data['space'] = localfs.getAllSpace()
+                data['free'] = localfs.getFreeSpace()
+                ret['data'] = data
         else:
-            pass
+            form = json.loads(request.body)
+            st = Storage.objects.get(path=form['path'])
+            if len(st) > 0:
+                ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
+                return HttpResponse(ret)
+            st = localfs.LocalFsStorage(form['path'], form['disk'], form['mount'])
+            st.create()
+            Storage.objects.create(path=form['path'], type='local', disk=st.getDevice(), mount=st.getMount())
+
         return HttpResponse(json.dumps(ret))
     except:
         pass

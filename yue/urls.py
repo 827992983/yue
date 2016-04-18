@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^changepwd', admin_views.changepwd, name='changepwd'),
     url(r'^configure', admin_views.configure, name='configure'),
     url(r'^checkenv', admin_views.checkenv, name='checkenv'),
+    url(r'^storage', admin_views.storage, name='storage'),
     url(r'^users', login_views.users, name='users'),
     url(r'^user/create', login_views.create_user, name='create_user'),
     url(r'^user/delete', login_views.delete_user, name='delete_user'),
