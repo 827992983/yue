@@ -3,6 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
+    #set project environment
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yue.settings")
 
     from django.core.management import execute_from_command_line

@@ -99,8 +99,7 @@ def storage(request):
             if len(st) > 0:
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
                 return HttpResponse(ret)
-            st = localfs.LocalFsStorage(form['path'], form['disk'], form['mount'])
-            st.create()
+            st = localfs.LocalFsStorage(form['path'])
             Storage.objects.create(path=form['path'], type='local', disk=st.getDevice(), mount=st.getMount())
 
         return HttpResponse(json.dumps(ret))
