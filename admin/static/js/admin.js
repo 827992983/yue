@@ -31,6 +31,7 @@ function adminOnload() {
     document.getElementById("usermgmt").onclick = userMgmt;
     document.getElementById("configure").onclick = configure;
     document.getElementById("checkenv").onclick = checkEnv;
+    document.getElementById("storage").onclick = storage;
 
 
     var currUrl = window.location.toString();
@@ -46,6 +47,8 @@ function adminOnload() {
         configure();
     } else if (action == "#checkenv") {
         checkEnv();
+    } else if (action == "#storage") {
+        storage();
     }
 
 }
@@ -504,10 +507,20 @@ function checkEnv() {
         }
     });
 
-    if(gRefreshEnv){
-        setInterval(getEnv, 10000);
+    if (gRefreshEnv) {
+        setInterval(getEnv, 3000);
         gRefreshEnv = false;
     }
+}
+
+function storage() {
+    $.get({
+        url: "static/html/storage.html",
+        dataType: "text",
+        success: function (result) {
+            document.getElementById("mainsession").innerHTML = result;
+        }
+    });
 }
 
 function contact() {

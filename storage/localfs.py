@@ -33,5 +33,9 @@ class LocalFsStorage(object):
 
     def delete(self):
         try:
-            virt_engine = utils.getConfigField(
-            os.system("killall -9 %s" % ())
+            #virt_engine = utils.getConfigField(
+            #os.system("killall -9 %s" % ())
+            pass
+        except:
+            pass
+

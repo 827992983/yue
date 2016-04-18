@@ -73,7 +73,21 @@ def changepwd(request):
     ret = {'status': 1012, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
-def sleep(seconds):
+def sleep(request):
     ret = {'status':0}
-    time.sleep(seconds)
+    time.sleep(request.GET['seconds'])
+    return HttpResponse(json.dumps(ret))
+
+def storage(request):
+    ret = {'status':0, 'msg':'storage success', 'data': {}}
+    try:
+        if request.method == "GET":
+            pass
+        else:
+            pass
+        return HttpResponse(json.dumps(ret))
+    except:
+        pass
+
+    ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
