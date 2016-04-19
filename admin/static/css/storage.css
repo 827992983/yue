@@ -3,3 +3,18 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+#storage_mgmt select {
+    width: 130px;
+}
+
+#btn_add_storage {
+    margin-left: 10px;
+}
+
+#storage_delete {
+    float: right;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}

@@ -1,1 +1,30 @@
-network
+<form id="form_network">
+    <ul>
+        <li>
+            <label>网卡：</label>
+            <select>
+                <option>eth0</option>
+                <option>eth1</option>
+            </select>
+        </li>
+        <li>
+            <label>IP地址：</label>
+            <input id="ipaddr" type="text"/>
+        </li>
+        <li>
+            <label>子网掩码：</label>
+            <input id="netmask" type="text"/>
+        </li>
+        <li>
+            <label>网关：</label>
+            <input id="gateway" type="text"/>
+        </li>
+        <li>
+            <label>DNS：</label>
+            <input id="dns" type="text"/>
+        </li>
+        <li>
+            <input id="btn_network" type="button" value=" 确 定 "/>
+        </li>
+    </ul>
+</form>

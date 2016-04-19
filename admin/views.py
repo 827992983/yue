@@ -93,7 +93,7 @@ def storage(request):
                 data['space'] = localfs.getAllSpace()
                 data['free'] = localfs.getFreeSpace()
                 ret['data'] = data
-        else:
+        elif request.method == 'POST':
             form = json.loads(request.body)
             st = Storage.objects.get(path=form['path'])
             if len(st) > 0:
@@ -101,10 +101,26 @@ def storage(request):
                 return HttpResponse(ret)
             st = localfs.LocalFsStorage(form['path'])
             Storage.objects.create(path=form['path'], type='local', disk=st.getDevice(), mount=st.getMount())
-
+        else:
+            pass
         return HttpResponse(json.dumps(ret))
     except:
         pass
 
+    ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def network(request):
+    ret = {'status':0, 'msg':'storage operation success', 'data': {}}
+    data = {}
+    try:
+        if request.method == 'GET':
+            pass
+        elif request.method == 'POST':
+            pass
+        else:
+            pass
+    except:
+        pass
     ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))

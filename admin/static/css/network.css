@@ -1,0 +1,28 @@
+#form_network {
+    margin-top: 20px;
+    margin-left: 30%;
+    font-size: 12px;
+    position: relative;
+}
+
+#form_network label {
+    text-align: right;
+    width: 100px;
+    float: left;
+}
+
+#form_network select{
+    width: 130px;
+}
+
+#form_network ul {
+    list-style: none;
+}
+
+#form_network li {
+    margin-bottom: 10px;
+}
+
+#btn_network{
+    margin-left: 150px;
+}

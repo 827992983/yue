@@ -1,6 +1,15 @@
 <form id="storage_mgmt">
+
     <label id="label_storage">存储路径：</label> <input id="input_storage" name="input_storage" type="text"/>
+
+    <label id="label_storage">存储类型：</label>
+    <select id="select_storage_type">
+        <option>数据存储</option>
+        <option>iso存储</option>
+    </select>
+
     <input id="btn_add_storage" type="button" value=" 添 加 "/>
+
 </form>
 
 <table id="table_user">
@@ -15,3 +24,5 @@
     </tr>
     </thead>
 </table>
+
+<input id="storage_delete" type="button" value=" 删 除 ">
