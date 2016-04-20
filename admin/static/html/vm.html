@@ -1,1 +1,77 @@
-vms
+<nav id="nav_vm">
+    <ul class="ul_vm"><a id="creatvm" href="#vm">新建</a></ul>
+    <ul class="ul_vm"><a id="editvm" href="#vm">编辑</a></ul>
+    <ul class="ul_vm"><a id="deletevm" href="#vm">删除</a></ul>
+    <ul class="ul_vm"><a id="snapshot" href="#vm">创建快照</a></ul>
+    <ul class="ul_vm"><a id="template" href="#vm">创建模板</a></ul>
+    <ul class="ul_vm"><a id="iso" href="#vm">挂载光盘</a></ul>
+</nav>
+<table id="table_vm">
+    <thead>
+    <tr class="th_vm">
+        <td class="td_vm_title">序号</td>
+        <td class="td_vm_title">名称</td>
+        <td class="td_vm_title">系统</td>
+        <td class="td_vm_title">状态</td>
+        <td class="td_vm_title">CPU</td>
+        <td class="td_vm_title">内存</td>
+    </tr>
+    </thead>
+    <tr class="th_vm">
+        <td class="td_vm_title">1</td>
+        <td class="td_vm_title">myvm</td>
+        <td class="td_vm_title">windows7</td>
+        <td class="td_vm_title">运行</td>
+        <td class="td_vm_title">12%</td>
+        <td class="td_vm_title">2011MB</td>
+    </tr>
+    <tr class="th_vm">
+        <td class="td_vm_title">2</td>
+        <td class="td_vm_title">myserver</td>
+        <td class="td_vm_title">Centos6.6</td>
+        <td class="td_vm_title">关机</td>
+        <td class="td_vm_title">0%</td>
+        <td class="td_vm_title">0MB</td>
+    </tr>
+</table>
+<div id="vm_description">
+    <div id="vm_desc_list1" class="vm_desc_list">
+        <ul>
+            <li>
+                <label>vmID：</label><span></span>
+            </li>
+            <li>
+                <label>基于模板：</label><span></span>
+            </li>
+            <li>
+                <label>是否模板：</label><span></span>
+            </li>
+        </ul>
+    </div>
+    <div id="vm_desc_list2" class="vm_desc_list">
+        <ul>
+            <li>
+                <label>CPU：</label><span></span>
+            </li>
+            <li>
+                <label>内存：</label><span></span>
+            </li>
+            <li>
+                <label>网卡：</label><span></span>
+            </li>
+        </ul>
+    </div>
+    <div id="vm_desc_list3" class="vm_desc_list">
+        <ul>
+            <li>
+                <label>磁盘1：</label><span></span>
+            </li>
+            <li>
+                <label>磁盘2：</label><span></span>
+            </li>
+            <li>
+                <label>快照：</label><span></span>
+            </li>
+        </ul>
+    </div>
+</div>

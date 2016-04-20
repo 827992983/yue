@@ -28,11 +28,11 @@ function login() {
                 var data = eval("(" + ret + ")");
                 if (data.status == 0) {
                     if (data.data.to == 'admin') {
-                         window.location = 'admin';
+                         window.location = 'admin#vm';
                     } else if (data.data.to == 'guest') {
                           window.location = 'guest';
                     } else {
-                        alert('登陆异常！');
+                        alert('登陆异常！');vm
                     }
                 } else if (data.status == 1001) {
                     //用户名或密码错误提示

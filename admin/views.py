@@ -6,6 +6,7 @@ from .models import Configure
 from .models import Storage
 from config import sysconfig
 from storage import localfs
+from net import network
 # Create your views here.
 
 def index(request):
