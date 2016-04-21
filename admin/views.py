@@ -78,34 +78,38 @@ def changepwd(request):
 def storage(request):
     print 'storage request'
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
-    data = {}
+    data = []
     try:
         if request.method == "GET":
-            path = request.GET['path']
-            st = Storage.objects.get(path=path)
-            if st is None or len(st) != 1:
+            st = Storage.objects.all()
+            if st is None or len(st) < 1:
                 ret = {'status':3001, 'msg':'get storage info from db with error', 'data': {}}
                 return HttpResponse(json.dumps(ret))
-            data['path'] = st.path
-            data['type'] = st.type
-            if st.type == 'local':
-                local = localfs.LocalFsStorage(st.path)
-                data['space'] = local.getAllSpace()
-                data['free'] = local.getFreeSpace()
-                data['disk'] = local.getDevice()
-                data['mount'] = local.getMount()
-                ret['data'] = data
+            for elem in st:
+                s={}
+                s['path'] = elem.path
+                s['type'] = elem.type
+                if elem.type == 'local':
+                    local = localfs.LocalFsStorage(elem.path)
+                    s['space'] = local.getAllSpace()
+                    s['free'] = local.getFreeSpace()
+                    s['disk'] = local.getDevice()
+                    s['mount'] = local.getMount()
+                data.append(s)
+            ret['data'] = data
+            return HttpResponse(json.dumps(ret))
         elif request.method == 'POST':
             form = json.loads(request.body)
-            st = Storage.objects.get(path=form['path'])
-            if len(st) > 0:
+            print form
+            st = Storage.objects.filter(path=form['path'])
+            if  st is not None and len(st) > 0:
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
                 return HttpResponse(ret)
-            st = localfs.LocalFsStorage(form['path'])
-            Storage.objects.create(path=form['path'], type='local', disk=st.getDevice(), mount=st.getMount())
+            st = localfs.LocalFsStorage(form['path'], True)
+            Storage.objects.create(path=form['path'], type=form['type'])
+            return HttpResponse(json.dumps(ret))
         else:
             pass
-        return HttpResponse(json.dumps(ret))
     except:
         pass
 

@@ -82,15 +82,15 @@ function userMgmt() {
         url: "/users",
         dataType: "json",
         success: function (result) {
-            document.getElementById("table_user");
+            //document.getElementById("table_user");
             if (result.status == 0) {
                 var table = document.getElementById("table_user");
-                var i = 0;
                 var data = result.data;
+                var i = 0;
                 for (i = 0; i < data.length; i++) {
                     var tr = document.createElement("tr");
                     tr.setAttribute("name", "tr_user");
-                    table.appendChild(tr)
+                    table.appendChild(tr);
 
                     var td = document.createElement('td');
                     td.setAttribute("name", "td_number");
@@ -102,7 +102,7 @@ function userMgmt() {
                     td.appendChild(chkbox);
                     var span = document.createElement("span");
                     span.innerHTML = "&nbsp;&nbsp;&nbsp;" + i.toString()
-                    td.appendChild(span)
+                    td.appendChild(span);
 
                     var td = document.createElement('td');
                     td.setAttribute("name", "td_username");
@@ -544,8 +544,14 @@ function getSelectedStorage() {
 
 function addStorage() {
     var data = new Object();
-    data.path = document.getElementById("input_storage").getAttribute('value')
-    data.type = document.getElementById("select_storage_type")
+    data.path = document.getElementById("input_storage").value;
+    var selected = document.getElementById("select_storage_type").selectedIndex;
+    if (selected == ""){
+        data.type = "local";
+    }else if(selected == 1){
+        data.type = "iso";
+    }
+    alert(JSON.stringify(data))
     $.ajax({
         url: "/storage",
         method: "POST",
@@ -556,7 +562,6 @@ function addStorage() {
         },
         success: function (result) {
             if (result.status == 0) {
-                alert("添加存储成功！");
                 window.location.reload();
             } else {
                 alert("添加存储失败！");
@@ -606,13 +611,13 @@ function storageMgmt() {
         },
         success: function (result) {
             if (result.status == 0) {
-                alert(JSON.stringify(result));
-                data = result.data;
+                var data = result.data;
+                var table = document.getElementById('table_user');
                 var i = 0;
-                for (i = 0; i < data.length; i++) {
+                for (i=0; i<data.length; i++) {
                     var tr = document.createElement("tr");
                     tr.setAttribute("name", "tr_user");
-                    table.appendChild(tr)
+                    table.appendChild(tr);
 
                     var td = document.createElement('td');
                     td.setAttribute("name", "td_number");
@@ -653,13 +658,13 @@ function storageMgmt() {
                     td = document.createElement('td');
                     td.setAttribute("name", "td_all_space");
                     td.setAttribute("class", "td_user_title");
-                    td.innerHTML = data[i].allspace;
+                    td.innerHTML = data[i].space;
                     tr.appendChild(td);
 
                     td = document.createElement('td');
                     td.setAttribute("name", "td_freespace");
                     td.setAttribute("class", "td_user_title");
-                    td.innerHTML = data[i].freespace;
+                    td.innerHTML = data[i].free;
                     tr.appendChild(td);
                 }
             }
