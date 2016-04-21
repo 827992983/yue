@@ -13,8 +13,6 @@ class Configure(models.Model):
 class Storage(models.Model):
     path = models.CharField(max_length=64, primary_key=True)
     type = models.CharField(max_length=20,default='')
-    disk = models.CharField(max_length=20,default='')
-    mount = models.CharField(max_length=64,default='')
 
     def __unicode__(self):
         return self.path

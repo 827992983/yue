@@ -100,9 +100,19 @@ class Network(object):
         return errno.Success
 
     def devices(self):
-        data = {}
+        data = []
         try:
-            pass
+            out,err,errcode = utils.execShellCommand("ifcfg|grep Ethernet|grep eth|awk'{print $1}'")
+            li = out.split('\n')
+            for s in li:
+                if len(s)>0:
+                    data.append(s)
+            out,err,errcode = utils.execShellCommand("ifcfg|grep Ethernet|grep em|awk'{print $1}'")
+            li = out.split('\n')
+            for s in li:
+                if len(s)>0:
+                    data.append(s)
+            errno.Success['data'] = data
         except:
             pass
         return errno.Success

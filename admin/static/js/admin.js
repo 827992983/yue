@@ -31,8 +31,8 @@ function adminOnload() {
     document.getElementById("usermgmt").onclick = userMgmt;
     document.getElementById("configure").onclick = configure;
     document.getElementById("checkenv").onclick = checkEnv;
-    document.getElementById("storage").onclick = storage;
-    document.getElementById("network").onclick = network;
+    document.getElementById("storage").onclick = storageMgmt;
+    document.getElementById("network").onclick = networkMgmt;
     document.getElementById("manual").onclick = manual;
     document.getElementById("reference").onclick = reference;
     document.getElementById("download").onclick = download;
@@ -52,9 +52,9 @@ function adminOnload() {
     } else if (action == "#checkenv") {
         checkEnv();
     } else if (action == "#storage") {
-        storage();
+        storageMgmt();
     } else if (action == "#network") {
-        network();
+        networkMgmt();
     } else if (action == "#manual") {
         manual();
     } else if (action == "#reference") {
@@ -206,7 +206,7 @@ function createUser() {
                         //alert("用户创建成功！");
                         $('.theme-popover-mask').fadeOut(100);
                         $('.theme-popover').slideUp(200);
-                        window.location.reload();
+                        window.location.reload();//刷新页面的方法
                     } else {
                         alert("用户创建失败");
                     }
@@ -527,7 +527,67 @@ function checkEnv() {
     }
 }
 
-function storage() {
+function getSelectedStorage() {
+    var list = document.getElementsByName("tr_user");
+    var i = 0;
+    var ret = new Array();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            //if storage is selected, get path
+            var path = list[i].childNodes[1].innerHTML;
+            ret.push(path);
+        }
+    }
+
+    return ret;
+}
+
+function addStorage() {
+    var data = new Object();
+    data.path = document.getElementById("input_storage").getAttribute('value')
+    data.type = document.getElementById("select_storage_type")
+    $.ajax({
+        url: "/storage",
+        method: "POST",
+        data: JSON.stringify(data),
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            if (result.status == 0) {
+                alert("添加存储成功！");
+                window.location.reload();
+            } else {
+                alert("添加存储失败！");
+            }
+        }
+    });
+}
+
+function deleteStorage() {
+    var ret = getSelectedStorage();
+
+    $.ajax({
+        async: false,
+        url: "/storage",
+        method: "DELETE",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("删除用户失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
+}
+
+function storageMgmt() {
     $.get({
         url: "static/html/storage.html",
         dataType: "text",
@@ -535,14 +595,100 @@ function storage() {
             document.getElementById("mainsession").innerHTML = result;
         }
     });
+
+    $.ajax({
+        url: "/storage",
+        method: "GET",
+        async: false,
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            if (result.status == 0) {
+                alert(JSON.stringify(result));
+                data = result.data;
+                var i = 0;
+                for (i = 0; i < data.length; i++) {
+                    var tr = document.createElement("tr");
+                    tr.setAttribute("name", "tr_user");
+                    table.appendChild(tr)
+
+                    var td = document.createElement('td');
+                    td.setAttribute("name", "td_number");
+                    td.setAttribute("class", "td_user_title");
+                    tr.appendChild(td);
+                    var chkbox = document.createElement("input");
+                    chkbox.setAttribute("type", "checkbox");
+                    chkbox.setAttribute("name", "select_user");
+                    td.appendChild(chkbox);
+                    var span = document.createElement("span");
+                    span.innerHTML = "&nbsp;&nbsp;&nbsp;" + i.toString()
+                    td.appendChild(span)
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_path");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].path;
+                    tr.appendChild(td);
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_type");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].type;
+                    tr.appendChild(td);
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_disk");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].disk;
+                    tr.appendChild(td);
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_mount");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].mount;
+                    tr.appendChild(td);
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_all_space");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].allspace;
+                    tr.appendChild(td);
+
+                    td = document.createElement('td');
+                    td.setAttribute("name", "td_freespace");
+                    td.setAttribute("class", "td_user_title");
+                    td.innerHTML = data[i].freespace;
+                    tr.appendChild(td);
+                }
+            }
+        }
+    });
 }
 
-function network() {
+function networkMgmt() {
     $.get({
         url: "static/html/network.html",
         dataType: "text",
         success: function (result) {
             document.getElementById("mainsession").innerHTML = result;
+        }
+    });
+
+    $.ajax({
+        url: "/network",
+        method: "GET",
+        async: false,
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            if(result.status == 0){
+                alert(JSON.stringify(result));
+
+            }
         }
     });
 }

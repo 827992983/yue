@@ -76,6 +76,7 @@ def changepwd(request):
     return HttpResponse(json.dumps(ret))
 
 def storage(request):
+    print 'storage request'
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
     data = {}
     try:
@@ -87,12 +88,12 @@ def storage(request):
                 return HttpResponse(json.dumps(ret))
             data['path'] = st.path
             data['type'] = st.type
-            data['disk'] = st.disk
-            data['mount'] = st.mount
             if st.type == 'local':
                 local = localfs.LocalFsStorage(st.path)
-                data['space'] = localfs.getAllSpace()
-                data['free'] = localfs.getFreeSpace()
+                data['space'] = local.getAllSpace()
+                data['free'] = local.getFreeSpace()
+                data['disk'] = local.getDevice()
+                data['mount'] = local.getMount()
                 ret['data'] = data
         elif request.method == 'POST':
             form = json.loads(request.body)
@@ -112,6 +113,7 @@ def storage(request):
     return HttpResponse(json.dumps(ret))
 
 def network(request):
+    print 'network request'
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
     data = {}
     try:
