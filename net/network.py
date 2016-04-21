@@ -102,12 +102,7 @@ class Network(object):
     def devices(self):
         data = []
         try:
-            out,err,errcode = utils.execShellCommand("ifcfg|grep Ethernet|grep eth|awk'{print $1}'")
-            li = out.split('\n')
-            for s in li:
-                if len(s)>0:
-                    data.append(s)
-            out,err,errcode = utils.execShellCommand("ifcfg|grep Ethernet|grep em|awk'{print $1}'")
+            out,err,errcode = utils.execShellCommand("ifcfg|grep 'Ethernet'|grep 'eth\|eno\|em'|awk'{print $1}'")
             li = out.split('\n')
             for s in li:
                 if len(s)>0:
