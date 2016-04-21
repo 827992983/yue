@@ -76,7 +76,6 @@ def changepwd(request):
     return HttpResponse(json.dumps(ret))
 
 def storage(request):
-    print 'storage request'
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
     data = []
     try:
@@ -89,7 +88,7 @@ def storage(request):
                 s={}
                 s['path'] = elem.path
                 s['type'] = elem.type
-                if elem.type == 'local':
+                if elem.type=='local' or elem.type=='iso':
                     local = localfs.LocalFsStorage(elem.path)
                     s['space'] = local.getAllSpace()
                     s['free'] = local.getFreeSpace()
@@ -100,16 +99,20 @@ def storage(request):
             return HttpResponse(json.dumps(ret))
         elif request.method == 'POST':
             form = json.loads(request.body)
-            print form
             st = Storage.objects.filter(path=form['path'])
             if  st is not None and len(st) > 0:
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
-                return HttpResponse(ret)
+                return HttpResponse(json.dumps(ret))
             st = localfs.LocalFsStorage(form['path'], True)
             Storage.objects.create(path=form['path'], type=form['type'])
             return HttpResponse(json.dumps(ret))
-        else:
-            pass
+        elif request.method=="DELETE":
+            form = json.loads(request.body)
+            for elem in form:
+                local = localfs.LocalFsStorage(elem)
+                local.delete()
+                Storage.objects.filter(path=elem).delete()
+            return HttpResponse(json.dumps(ret))
     except:
         pass
 

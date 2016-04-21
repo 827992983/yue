@@ -546,7 +546,7 @@ function addStorage() {
     var data = new Object();
     data.path = document.getElementById("input_storage").value;
     var selected = document.getElementById("select_storage_type").selectedIndex;
-    if (selected == ""){
+    if (selected == 0){
         data.type = "local";
     }else if(selected == 1){
         data.type = "iso";
@@ -572,7 +572,9 @@ function addStorage() {
 
 function deleteStorage() {
     var ret = getSelectedStorage();
-
+    if (confirm("删除存储后，数据无法恢复，确认删除？？") == false){
+        return;
+    }
     $.ajax({
         async: false,
         url: "/storage",
@@ -583,7 +585,7 @@ function deleteStorage() {
             if (result.status == 0) {
                 window.location.reload();
             } else {
-                alert("删除用户失败！");
+                alert("删除存储失败！");
             }
         },
         beforeSend: function (xhr) {
@@ -593,7 +595,8 @@ function deleteStorage() {
 }
 
 function storageMgmt() {
-    $.get({
+    $.ajax({
+        async: false,
         url: "static/html/storage.html",
         dataType: "text",
         success: function (result) {
@@ -670,6 +673,8 @@ function storageMgmt() {
             }
         }
     });
+    document.getElementById("btn_add_storage").onclick = addStorage;
+    document.getElementById("storage_delete").onclick = deleteStorage;
 }
 
 function networkMgmt() {

@@ -27,7 +27,7 @@ class LocalFsStorage(object):
         if len(self.path)>0 and os.path.exists(self.path):
             pass
         else:
-            os.mkdir(self.path)
+            os.makedirs(self.path)
         if not os.path.exists(self.image):
             os.mkdir(self.image)
         if not os.path.exists(self.template):
@@ -36,7 +36,7 @@ class LocalFsStorage(object):
     def delete(self):
         try:
             if os.path.exists(self.path):
-                os.remove(self.path)
+                utils.execShellCommand('rm -rf %s' % self.path)
         except:
             return errno.ERR_DELETE_STORAGE
         return errno.Success

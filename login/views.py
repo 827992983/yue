@@ -80,9 +80,7 @@ def create_user(request):
     try:
         ret = {'status':0, 'msg':'create user success', 'data': {}}
         if request.method == 'POST':
-            print request.body
             form = json.loads(request.body)
-            print form
             userinfo = User.objects.filter(name=form['name'])
             if userinfo != None and len(userinfo) > 0:
                 ret = {'status':1004, 'msg':'user have exist', 'data': {}}
@@ -113,9 +111,7 @@ def delete_user(request):
     try:
         ret = {'status':0, 'msg':'delete user success', 'data': {}}
         if request.method == 'POST':
-            print request.body
             form = json.loads(request.body)
-            print form
             for username in form:
                 userinfo = User.objects.filter(name=username)
                 if userinfo == None or len(userinfo) == 0:
@@ -134,9 +130,7 @@ def edit_user(request):
     try:
         ret = {'status':0, 'msg':'edit user success', 'data': {}}
         if request.method == 'POST':
-            print request.body
             form = json.loads(request.body)
-            print form
             userinfo = User.objects.filter(name=form['name'])[0]
             if userinfo == None and len(userinfo) == 0:
                 ret = {'status':1011, 'msg':'user is not exist', 'data': {}}
