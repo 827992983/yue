@@ -36,7 +36,7 @@ NM_CONTROLLED=no
 
 DNS = 'nameserver dnsip'
 
-def update(network='', ip='', netmask='', gateway=''):
+def update(network='', ip='', netmask='', gateway='', dns=''):
     try:
         fd = open('/etc/sysconfig/network-scripts/ifcfg-%s' % (network), 'w')
         cfg = NETWORK.replace('networkdevice', network)
@@ -60,8 +60,8 @@ def update(network='', ip='', netmask='', gateway=''):
         fd1.close()
 
     try:
-        fd2 = open('/etc/sysconfig/network' % (device), 'w')
-        cf2 = DNS.replace('dnsip', device)
+        fd2 = open('/etc/resolv.conf', 'w')
+        cf2 = DNS.replace('dnsip', dns)
         fd2.write(cfg)
     except:
         return errno.ERR_CREAT_NETWORK
@@ -85,9 +85,23 @@ def load(network):
             if line.startswith("GATEWAY"):
                 gateway = line.split('=')
                 data['gateway'] = gateway[1].strip()
+        fd.close()
         errno.Success['data'] = data
     except:
-        pass
+        fd.close()
+
+    try:
+        fd2 = open('/etc/resolv.conf', 'r')
+        for line in fd2:
+            line = line.strip()
+            if line.startswith("nameserver"):
+                dns = line.split(' ')
+                data['dns'] = ip[-1].strip()
+        fd2.write(cfg)
+    except:
+        return errno.ERR_CREAT_NETWORK
+    finally:
+        fd2.close()
 
     return errno.Success
 
@@ -95,12 +109,23 @@ def load(network):
 def devices():
     data = []
     try:
-        out, err, errcode = utils.execShellCommand("ifcfg|grep 'Ethernet'|grep 'eth\|eno\|em'|awk'{print $1}'")
+        out, err, errcode = utils.execShellCommand("ifconfig|grep 'flag'|grep 'eth\|eno\|em'|awk '{print $1}'")
+        print out
         li = out.split('\n')
+        print li
         for s in li:
             if len(s) > 0:
+                if s.endswith(':'):
+                    s=s[:-1]
                 data.append(s)
         errno.Success['data'] = data
+    except:
+        return errno.ERR_GET_NETWORK_DEVICE
+    return errno.Success
+
+def disable(dev):
+    try:
+        out, err, errcode = utils.execShellCommand("echo > /etc/sysconfig/network-scripts/ifcfg-%s" % dev)
     except:
         return errno.ERR_GET_NETWORK_DEVICE
     return errno.Success

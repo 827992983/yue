@@ -124,15 +124,36 @@ def network(request):
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
     try:
         if request.method == 'GET':
-            data = {}
+            all = []
             devices = net.devices()
-            for dev in devices:
-                data[dev] = {}
+            print devices
+            for dev in devices['data']:
+                data = {}
+                data['dev'] = dev
                 db = Configure.objects.filter(key='network')
                 if db is not None and len(db)==1:
-                    date[dev] = net.load('network-%s' % dev)['data']
+                    data = net.load('vmbridge')['data']
+                    data['dev'] = dev
+                all.append(data)
+            ret['data'] = all
+            return HttpResponse(json.dumps(ret))
         elif request.method == 'POST':
-            pass
+            form = json.loads(request.body)
+            print form
+            db = Configure.objects.filter(key='network')
+            print 0
+            if db is None or len(db) == 0:
+                print 1
+                result = net.update('vmbridge', form['ip'], form['netmask'], form['gateway'], form['dns'])
+                print 1.1
+                if result['status'] == 0:
+                    print 2
+                    Configure.objects.filter(key='network').update(value=form['dev'])
+            if db is not None and len(db) == 1:
+                print 3
+                net.disable(Configure.objects.filter(key='network')[0].value)
+                result = net.update('vmbridge', form['ip'], form['netmask'], form['gateway'], form['dns'])
+            return HttpResponse(json.dumps(ret))
         else:
             pass
     except:

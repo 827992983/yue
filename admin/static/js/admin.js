@@ -697,10 +697,63 @@ function networkMgmt() {
         },
         success: function (result) {
             if(result.status == 0){
-                alert(JSON.stringify(result));
+                //alert(JSON.stringify(result));
+                var all = result.data;
+                alert(JSON.stringify(all))
+                for (i in all){
+                    var dev = all[i].dev;
+                    if(dev != null){
+                         document.getElementById("device_select").add(new Option(dev));
+                    }
+                    var ip = all[i].ip;
+                    if(ip != null){
+                         document.getElementById("ipaddr").setAttribute('value', ip);
+                    }
+                    var netmask = all[i].netmask;
+                    if(netmask != null){
+                         document.getElementById("netmask").setAttribute('value', netmask);
+                    }
+                    var gateway = all[i].gateway;
+                    if(gateway != null){
+                         document.getElementById("gateway").setAttribute('value', gateway);
+                    }
+                    var dns = all[i].dns;
+                    if(dns != null){
+                         document.getElementById("dns").setAttribute('value', dns);
+                    }
+                }
             }
         }
     });
+    document.getElementById("btn_network").onclick = setNetwork;
+}
+
+function setNetwork(){
+    var jsondata = new Object();
+            var selected = document.getElementById("device_select");
+            var index = selected.selectedIndex;
+            var value = selected.options[index].value;
+            jsondata.dev = value;
+            jsondata.ip = document.getElementById("ipaddr").value;
+            jsondata.netmask = document.getElementById("netmask").value;
+            jsondata.gateway = document.getElementById("gateway").value;
+            jsondata.dns = document.getElementById("dns").value;
+            $.ajax({
+                url: "/network",
+                method: "POST",
+                data: JSON.stringify(jsondata),
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"));
+                },
+                success: function (result) {
+                    if (result.status == 0) {
+                        alert(JSON.stringify(result.data));
+                    } else {
+                        alert("配置网络失败！");
+                    }
+                }
+            });
 }
 
 function vm() {
