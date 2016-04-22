@@ -28,7 +28,7 @@ function login() {
                 var data = eval("(" + ret + ")");
                 if (data.status == 0) {
                     if (data.data.to == 'admin') {
-                         window.location = 'admin#vm';
+                         window.location = 'admin';
                     } else if (data.data.to == 'guest') {
                           window.location = 'guest';
                     } else {

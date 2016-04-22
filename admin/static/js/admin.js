@@ -678,7 +678,8 @@ function storageMgmt() {
 }
 
 function networkMgmt() {
-    $.get({
+    $.ajax({
+        async: false,
         url: "static/html/network.html",
         dataType: "text",
         success: function (result) {
@@ -697,7 +698,6 @@ function networkMgmt() {
         success: function (result) {
             if(result.status == 0){
                 alert(JSON.stringify(result));
-
             }
         }
     });

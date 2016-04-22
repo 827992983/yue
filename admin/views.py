@@ -6,7 +6,7 @@ from .models import Configure
 from .models import Storage
 from config import sysconfig
 from storage import localfs
-from net import network
+from net import net
 # Create your views here.
 
 def index(request):
@@ -122,10 +122,15 @@ def storage(request):
 def network(request):
     print 'network request'
     ret = {'status':0, 'msg':'storage operation success', 'data': {}}
-    data = {}
     try:
         if request.method == 'GET':
-            pass
+            data = {}
+            devices = net.devices()
+            for dev in devices:
+                data[dev] = {}
+                db = Configure.objects.filter(key='network')
+                if db is not None and len(db)==1:
+                    date[dev] = net.load('network-%s' % dev)['data']
         elif request.method == 'POST':
             pass
         else:
