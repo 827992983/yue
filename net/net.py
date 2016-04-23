@@ -36,7 +36,8 @@ NM_CONTROLLED=no
 
 DNS = 'nameserver dnsip'
 
-def update(network='', ip='', netmask='', gateway='', dns=''):
+def update(network='', device='', ip='', netmask='', gateway='', dns=''):
+    print 1.1
     try:
         fd = open('/etc/sysconfig/network-scripts/ifcfg-%s' % (network), 'w')
         cfg = NETWORK.replace('networkdevice', network)
@@ -44,12 +45,14 @@ def update(network='', ip='', netmask='', gateway='', dns=''):
         cfg = cfg.replace('true_netmask', netmask)
         cfg = cfg.replace('true_gateway', gateway)
         fd.write(cfg)
+        print 1.2
     except:
         return errno.ERR_CREAT_NETWORK
     finally:
         fd.close()
 
     try:
+        print 1.3
         fd1 = open('/etc/sysconfig/network-scripts/ifcfg-%s' % (device), 'w')
         cfg = ETHX.replace('devicename', device)
         cfg = cfg.replace('bridgename', network)
@@ -60,14 +63,15 @@ def update(network='', ip='', netmask='', gateway='', dns=''):
         fd1.close()
 
     try:
+        print 1.4
         fd2 = open('/etc/resolv.conf', 'w')
-        cf2 = DNS.replace('dnsip', dns)
-        fd2.write(cfg)
+        cfg2 = DNS.replace('dnsip', dns)
+        fd2.write(cfg2)
     except:
         return errno.ERR_CREAT_NETWORK
     finally:
         fd2.close()
-        utils.execShellCommand('service network restart')
+    utils.execShellCommand('service network restart')
     return errno.Success
 
 
@@ -76,6 +80,7 @@ def load(network):
     try:
         fd = open('/etc/sysconfig/network-scripts/ifcfg-%s' % (network), 'r')
         for line in fd:
+            print 'line=%s' % line
             if line.startswith("IPADDR"):
                 ip = line.split('=')
                 data['ip'] = ip[1].strip()
@@ -86,7 +91,6 @@ def load(network):
                 gateway = line.split('=')
                 data['gateway'] = gateway[1].strip()
         fd.close()
-        errno.Success['data'] = data
     except:
         fd.close()
 
@@ -96,13 +100,13 @@ def load(network):
             line = line.strip()
             if line.startswith("nameserver"):
                 dns = line.split(' ')
-                data['dns'] = ip[-1].strip()
-        fd2.write(cfg)
+                data['dns'] = dns[-1].strip()
     except:
         return errno.ERR_CREAT_NETWORK
     finally:
         fd2.close()
-
+    errno.Success['data'] = data
+    print errno.Success
     return errno.Success
 
 

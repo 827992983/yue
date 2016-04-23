@@ -739,6 +739,7 @@ function setNetwork(){
             jsondata.gateway = document.getElementById("gateway").value;
             jsondata.dns = document.getElementById("dns").value;
             $.ajax({
+                async: false,
                 url: "/network",
                 method: "POST",
                 data: JSON.stringify(jsondata),
@@ -748,9 +749,9 @@ function setNetwork(){
                 },
                 success: function (result) {
                     if (result.status == 0) {
-                        alert(JSON.stringify(result.data));
+                        alert("配置网络成功!");
                     } else {
-                        alert("配置网络失败！");
+                        alert("配置网络失败!");
                     }
                 }
             });

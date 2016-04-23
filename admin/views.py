@@ -144,15 +144,13 @@ def network(request):
             print 0
             if db is None or len(db) == 0:
                 print 1
-                result = net.update('vmbridge', form['ip'], form['netmask'], form['gateway'], form['dns'])
-                print 1.1
-                if result['status'] == 0:
-                    print 2
-                    Configure.objects.filter(key='network').update(value=form['dev'])
+                result = net.update(network='vmbridge', device=form['dev'], ip=form['ip'], netmask=form['netmask'], gateway=form['gateway'], dns=form['dns'])
+                Configure.objects.create(key='network',value='vmbridge')
+                print 2
             if db is not None and len(db) == 1:
                 print 3
                 net.disable(Configure.objects.filter(key='network')[0].value)
-                result = net.update('vmbridge', form['ip'], form['netmask'], form['gateway'], form['dns'])
+                result = net.update('vmbridge', form['dev'], form['ip'], form['netmask'], form['gateway'], form['dns'])
             return HttpResponse(json.dumps(ret))
         else:
             pass
