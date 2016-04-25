@@ -16,3 +16,21 @@ class Storage(models.Model):
 
     def __unicode__(self):
         return self.path
+
+class Vm(models.Model):
+    id = models.CharField(max_length=64, primary_key=True)
+    name = models.CharField(max_length=32)
+    cpu = models.IntegerField()
+    memory = models.IntegerFiled()
+    istemplate = models.CharField(max_length=10, default='No')
+    templatename = models.CharField(max_length=32, default='')
+    templatepath = models.CharField(max_length=128, default='')
+    nic1 = models.CharField(max_length=32, default='')
+    nic2 = models.CharField(max_length=32, default='')
+    disk1 = models.CharField(max_length=128, default='')
+    disk2 = models.CharField(max_length=128, default='')
+    snapshotname = models.CharField(max_length=32, default='')
+    snapshotpath = models.CharField(max_length=128, default='')
+
+    def __unicode__(self):
+        return self.id
