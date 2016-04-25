@@ -546,9 +546,9 @@ function addStorage() {
     var data = new Object();
     data.path = document.getElementById("input_storage").value;
     var selected = document.getElementById("select_storage_type").selectedIndex;
-    if (selected == 0){
+    if (selected == 0) {
         data.type = "local";
-    }else if(selected == 1){
+    } else if (selected == 1) {
         data.type = "iso";
     }
     alert(JSON.stringify(data))
@@ -572,7 +572,7 @@ function addStorage() {
 
 function deleteStorage() {
     var ret = getSelectedStorage();
-    if (confirm("删除存储后，数据无法恢复，确认删除？？") == false){
+    if (confirm("删除存储后，数据无法恢复，确认删除？？") == false) {
         return;
     }
     $.ajax({
@@ -617,7 +617,7 @@ function storageMgmt() {
                 var data = result.data;
                 var table = document.getElementById('table_user');
                 var i = 0;
-                for (i=0; i<data.length; i++) {
+                for (i = 0; i < data.length; i++) {
                     var tr = document.createElement("tr");
                     tr.setAttribute("name", "tr_user");
                     table.appendChild(tr);
@@ -696,30 +696,30 @@ function networkMgmt() {
             request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         },
         success: function (result) {
-            if(result.status == 0){
+            if (result.status == 0) {
                 //alert(JSON.stringify(result));
                 var all = result.data;
                 alert(JSON.stringify(all))
-                for (i in all){
+                for (i in all) {
                     var dev = all[i].dev;
-                    if(dev != null){
-                         document.getElementById("device_select").add(new Option(dev));
+                    if (dev != null) {
+                        document.getElementById("device_select").add(new Option(dev));
                     }
                     var ip = all[i].ip;
-                    if(ip != null){
-                         document.getElementById("ipaddr").setAttribute('value', ip);
+                    if (ip != null) {
+                        document.getElementById("ipaddr").setAttribute('value', ip);
                     }
                     var netmask = all[i].netmask;
-                    if(netmask != null){
-                         document.getElementById("netmask").setAttribute('value', netmask);
+                    if (netmask != null) {
+                        document.getElementById("netmask").setAttribute('value', netmask);
                     }
                     var gateway = all[i].gateway;
-                    if(gateway != null){
-                         document.getElementById("gateway").setAttribute('value', gateway);
+                    if (gateway != null) {
+                        document.getElementById("gateway").setAttribute('value', gateway);
                     }
                     var dns = all[i].dns;
-                    if(dns != null){
-                         document.getElementById("dns").setAttribute('value', dns);
+                    if (dns != null) {
+                        document.getElementById("dns").setAttribute('value', dns);
                     }
                 }
             }
@@ -728,33 +728,33 @@ function networkMgmt() {
     document.getElementById("btn_network").onclick = setNetwork;
 }
 
-function setNetwork(){
+function setNetwork() {
     var jsondata = new Object();
-            var selected = document.getElementById("device_select");
-            var index = selected.selectedIndex;
-            var value = selected.options[index].value;
-            jsondata.dev = value;
-            jsondata.ip = document.getElementById("ipaddr").value;
-            jsondata.netmask = document.getElementById("netmask").value;
-            jsondata.gateway = document.getElementById("gateway").value;
-            jsondata.dns = document.getElementById("dns").value;
-            $.ajax({
-                async: false,
-                url: "/network",
-                method: "POST",
-                data: JSON.stringify(jsondata),
-                dataType: "json",
-                beforeSend: function (request) {
-                    request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"));
-                },
-                success: function (result) {
-                    if (result.status == 0) {
-                        alert("配置网络成功!");
-                    } else {
-                        alert("配置网络失败!");
-                    }
-                }
-            });
+    var selected = document.getElementById("device_select");
+    var index = selected.selectedIndex;
+    var value = selected.options[index].value;
+    jsondata.dev = value;
+    jsondata.ip = document.getElementById("ipaddr").value;
+    jsondata.netmask = document.getElementById("netmask").value;
+    jsondata.gateway = document.getElementById("gateway").value;
+    jsondata.dns = document.getElementById("dns").value;
+    $.ajax({
+        async: false,
+        url: "/network",
+        method: "POST",
+        data: JSON.stringify(jsondata),
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"));
+        },
+        success: function (result) {
+            if (result.status == 0) {
+                alert("配置网络成功!");
+            } else {
+                alert("配置网络失败!");
+            }
+        }
+    });
 }
 
 function vm() {

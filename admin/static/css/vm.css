@@ -123,29 +123,29 @@ table {
     width: 200px;
 }
 
-#vm_desc_list1{
-    width:30%
+#vm_desc_list1 {
+    width: 30%
 }
 
-#vm_desc_list2{
-    width:30%
+#vm_desc_list2 {
+    width: 30%
 }
 
-#vm_desc_list3{
-    width:30%
+#vm_desc_list3 {
+    width: 30%
 }
 
-#vm_description label{
-    width:60px;
+#vm_description label {
+    width: 60px;
     text-align: right;
 }
 
-#vm_description span{
-    width:200px
+#vm_description span {
+    width: 200px
 }
 
-.prompt{
-   font-size:12px;
-   font-color: #FF0000;
-   border-top: 1px solid #ccc;
+.prompt {
+    font-size: 12px;
+    font-color: #FF0000;
+    border-top: 1px solid #ccc;
 }
