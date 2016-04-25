@@ -2,8 +2,10 @@
     <ul class="ul_vm"><a id="creatvm" href="#vm">新建</a></ul>
     <ul class="ul_vm"><a id="editvm" href="#vm">编辑</a></ul>
     <ul class="ul_vm"><a id="deletevm" href="#vm">删除</a></ul>
-    <ul class="ul_vm"><a id="snapshot" href="#vm">创建快照</a></ul>
-    <ul class="ul_vm"><a id="template" href="#vm">创建模板</a></ul>
+    <ul class="ul_vm"><a id="createsnapshot" href="#vm">创建快照</a></ul>
+    <ul class="ul_vm"><a id="deletesnapshot" href="#vm">删除快照</a></ul>
+    <ul class="ul_vm"><a id="createtemplate" href="#vm">创建模板</a></ul>
+    <ul class="ul_vm"><a id="celetetemplate" href="#vm">删除模板</a></ul>
     <ul class="ul_vm"><a id="iso" href="#vm">挂载光盘</a></ul>
 </nav>
 <table id="table_vm">
@@ -38,40 +40,45 @@
     <div id="vm_desc_list1" class="vm_desc_list">
         <ul>
             <li>
-                <label>vmID：</label><span></span>
+                <label>vmID：</label><span class="vm_desc">1234-1234-1234-1234</span>
             </li>
             <li>
-                <label>基于模板：</label><span></span>
+                <label>基于模板：</label><span class="vm_desc">2345-2345-2345-2345</span>
             </li>
             <li>
-                <label>是否模板：</label><span></span>
+                <label>是否模板：</label><span class="vm_desc">Yes</span>
             </li>
         </ul>
     </div>
     <div id="vm_desc_list2" class="vm_desc_list">
         <ul>
             <li>
-                <label>CPU：</label><span></span>
+                <label>CPU：</label><span class="vm_desc">2</span>
             </li>
             <li>
-                <label>内存：</label><span></span>
+                <label>内存：</label><span class="vm_desc">4096 MB</span>
             </li>
             <li>
-                <label>网卡：</label><span></span>
+                <label>网卡：</label><span class="vm_desc">nic1,nic2</span>
             </li>
         </ul>
     </div>
     <div id="vm_desc_list3" class="vm_desc_list">
         <ul>
             <li>
-                <label>磁盘1：</label><span></span>
+                <label>磁盘1：</label><span class="vm_desc">15GB</span>
             </li>
             <li>
-                <label>磁盘2：</label><span></span>
+                <label>磁盘2：</label><span class="vm_desc">20GB</span>
             </li>
             <li>
-                <label>快照：</label><span></span>
+                <label>快照：</label><span class="vm_desc">snapshort1</span>
             </li>
         </ul>
     </div>
+</div>
+<div class="clear"></div>
+<div class="prompt">
+    <label>提示：</label>
+    <span id="prompt"></span>
 </div>
