@@ -19,9 +19,11 @@ class Storage(models.Model):
 
 class Vm(models.Model):
     id = models.CharField(max_length=64, primary_key=True)
+    user = models.CharField(max_length=32, default='admin')
     name = models.CharField(max_length=32)
+    system = models.CharField(max_length=32, default='')
     cpu = models.IntegerField()
-    memory = models.IntegerFiled()
+    memory = models.IntegerField()
     istemplate = models.CharField(max_length=10, default='No')
     templatename = models.CharField(max_length=32, default='')
     templatepath = models.CharField(max_length=128, default='')
@@ -31,6 +33,7 @@ class Vm(models.Model):
     disk2 = models.CharField(max_length=128, default='')
     snapshotname = models.CharField(max_length=32, default='')
     snapshotpath = models.CharField(max_length=128, default='')
+    yourself = models.CharField(max_length=256, default='')
 
     def __unicode__(self):
         return self.id

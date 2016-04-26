@@ -14,6 +14,9 @@ import sys
 import socket
 import logging
 
+def uuid():
+    return ''
+
 def execShellCommand(cmd, wait=0, fast=False, verbose=False):
     """
     execute a linux shell command

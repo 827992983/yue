@@ -4,9 +4,11 @@ import json
 from login.models import User
 from .models import Configure
 from .models import Storage
+from .models import Vm
 from config import sysconfig
 from storage import localfs
 from net import net
+from yuelibs import utils
 # Create your views here.
 
 def index(request):
@@ -81,6 +83,7 @@ def storage(request):
     try:
         if request.method == "GET":
             st = Storage.objects.all()
+            print type(st)
             if st is None or len(st) < 1:
                 ret = {'status':3001, 'msg':'get storage info from db with error', 'data': {}}
                 return HttpResponse(json.dumps(ret))
@@ -157,4 +160,95 @@ def network(request):
     except:
         pass
     ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm(request):
+    ret = {'status':0, 'msg':'vm operation success', 'data': {}}
+    data = []
+    print 'vm request'
+    try:
+        if request.method == "GET":
+            print request.GET
+            if request.GET['vmid'] == 'all':
+                vms = Vm.objects.all()
+                print type(vms)
+                print 2.0
+                if vms is None:
+                    print 2.1
+                print len(vms)
+                print 2.2
+                if vms is None or len(vms)<1:
+                    print 3
+                    pass
+                else:
+                    print 4
+                    for elem in vms:
+                        vminfo = {}
+                        vminfo['vmid'] = elem.id
+                        vminfo['name'] = elem.name
+                        vminfo['system'] = elem.system
+                        vminfo['cpu'] = elem.cpu
+                        vminfo['memory'] = elem.memory
+                        vminfo['user'] = elem.user
+                        vminfo['istemplate'] = elem.istemplate
+                        vminfo['templatename'] = elem.templatename
+                        vminfo['templatepath'] = elem.templatepath
+                        vminfo['nic1'] = elem.nic1
+                        vminfo['nic2'] = elem.nic1
+                        vminfo['disk1'] = elem.disk1
+                        vminfo['disk2'] = elem.disk2
+                        vminfo['snapshotname'] = elem.snapshotname
+                        vminfo['snapshotpath'] = elem.snapshotpath
+                        vminfo['yourself'] = elem.yourself
+                        data.append(vminfo)
+            else:
+                id = request.GET['vmid']
+                elem = Vm.objects.filter(vmid=id)[0]
+                vminfo = {}
+                vminfo['vmid'] = elem.id
+                vminfo['name'] = elem.name
+                vminfo['system'] = elem.system
+                vminfo['cpu'] = elem.cpu
+                vminfo['memory'] = elem.memory
+                vminfo['user'] = elem.user
+                vminfo['istemplate'] = elem.istemplate
+                vminfo['templatename'] = elem.templatename
+                vminfo['templatepath'] = elem.templatepath
+                vminfo['nic1'] = elem.nic1
+                vminfo['nic2'] = elem.nic1
+                vminfo['disk1'] = elem.disk1
+                vminfo['disk2'] = elem.disk2
+                vminfo['snapshotname'] = elem.snapshotname
+                vminfo['snapshotpath'] = elem.snapshotpath
+                vminfo['yourself'] = elem.yourself
+                data.append(vminfo)
+            ret['data'] = data
+        elif request.method == "POST":
+            form = json.loads(request.body)
+            id = utils.uuid()
+            Vm.objects.create(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
+                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
+                              templatename=form['templatename'],templatepath=form['templatepath'],
+                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
+                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
+                              yourself=form['yourself'])
+        elif request.method == "PUT":
+            form = json.loads(request.body)
+            id = form['vmid']
+            Vm.objects.filter(vmid=id).update(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
+                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
+                              templatename=form['templatename'],templatepath=form['templatepath'],
+                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
+                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
+                              yourself=form['yourself'])
+        elif request.method == "DELETE":
+            form = json.loads(request.body)
+            for id in form:
+                Vm.objects.filter(vmid=id).delete()
+        else:
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+
+    ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))

@@ -1,3 +1,9 @@
+/*
+author:lijian
+date: 2016
+Copyright: free
+ */
+
 window.onload = adminOnload
 
 var gRefreshEnv = true;
@@ -38,6 +44,7 @@ function adminOnload() {
     document.getElementById("download").onclick = download;
     document.getElementById("vm").onclick = vm;
 
+    var flagHaveDo = true
     var currUrl = window.location.toString();
     var index = currUrl.indexOf("#", 0);
     var action = currUrl.substring(index, currUrl.length);
@@ -63,8 +70,11 @@ function adminOnload() {
         download();
     } else if (action == "#vm") {
         vm();
+        flagHaveDo = false;
     }
-
+    if(flagHaveDo){
+        vm();
+    }
 }
 
 function userMgmt() {
@@ -758,13 +768,31 @@ function setNetwork() {
 }
 
 function vm() {
-    $.get({
+    $.ajax({
         url: "static/html/vm.html",
+        method: "GET",
+        async: false,
         dataType: "text",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
         success: function (result) {
             document.getElementById("mainsession").innerHTML = result;
         }
     });
+
+    document.getElementById("creatvm").onclick = createVm;
+    document.getElementById("editvm").onclick = editVm;
+    document.getElementById("deletevm").onclick = deleteVm;
+    document.getElementById("startvm").onclick = startVm;
+    document.getElementById("connectvm").onclick = connectVm;
+    document.getElementById("stopvm").onclick = stopVm;
+    document.getElementById("createsnapshot").onclick = createSnapshot;
+    document.getElementById("deletesnapshot").onclick = deleteSnapshot;
+    document.getElementById("createtemplate").onclick = createTemplate;
+    document.getElementById("addiso").onclick = addIso;
+
+    getAllVms();
 }
 
 function contact() {

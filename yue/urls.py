@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^checkenv', admin_views.checkenv, name='checkenv'),
     url(r'^storage', admin_views.storage, name='storage'),
     url(r'^network', admin_views.network, name='network'),
+    url(r'^vm', admin_views.vm, name='vm'),
     url(r'^users', login_views.users, name='users'),
     url(r'^user/create', login_views.create_user, name='create_user'),
     url(r'^user/delete', login_views.delete_user, name='delete_user'),
