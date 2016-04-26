@@ -116,8 +116,8 @@ def storage(request):
                 local.delete()
                 Storage.objects.filter(path=elem).delete()
             return HttpResponse(json.dumps(ret))
-    except:
-        pass
+    except Exception,e:
+        print e
 
     ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
@@ -171,14 +171,7 @@ def vm(request):
             print request.GET
             if request.GET['vmid'] == 'all':
                 vms = Vm.objects.all()
-                print type(vms)
-                print 2.0
-                if vms is None:
-                    print 2.1
-                print len(vms)
-                print 2.2
                 if vms is None or len(vms)<1:
-                    print 3
                     pass
                 else:
                     print 4
@@ -246,9 +239,10 @@ def vm(request):
             for id in form:
                 Vm.objects.filter(vmid=id).delete()
         else:
-            return HttpResponse(json.dumps(ret))
-    except:
-        pass
+            pass
+        return HttpResponse(json.dumps(ret))
+    except Exception,e:
+        print e
 
     ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))

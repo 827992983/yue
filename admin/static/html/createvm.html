@@ -1,0 +1,49 @@
+<div class="theme-popover">
+    <div class="theme-poptit">
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h5>新建虚拟机</h5>
+    </div>
+    <div class="div_createvm">
+        <form class="form_createvm" name="loginform" action="" method="post">
+            <ol>
+                <li id="createvm_title"><h4>虚拟机基本信息：</h4></li>
+                <div class="left_createvm">
+                    <li><label>名称：</label><input class="vmpara" type="text" name="name" value="" size="20"/></li>
+                    <li><label>模板：</label><select></select></li>
+                    <li><label>系统类型：</label><select>
+                        <option>Windowx 7x64</option>
+                        <option>Windowx 7</option>
+                        <option>Windowx XP</option>
+                        <option>Linux X86_64</option>
+                        <option>Linux I386</option>
+                    </select></li>
+                    <li><label>CPU：</label><select>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>4</option>
+                        <option>8</option>
+                    </select>
+                    <li><label>内存(MB)：</label><input class="vmpara" type="text" name="memory" value="" size="20"/></li>
+                </div>
+                <div class="right_createvm">
+                    <li><label>网卡1：</label><select>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select></li>
+                    <li><label>网卡2：</label><select>
+                        <option>No</option>
+                        <option>Yes</option>
+                    </select></li>
+                    <li><label>磁盘1(GB)：</label><input class="vmpara" type="text" name="template" value="" size="20"/>
+                    </li>
+                    <li><label>磁盘2(GB)：</label><input class="vmpara" type="text" name="template" value="" size="20"/>
+                    </li>
+                    <li><label>所属用户：</label><select></select></li>
+                </div>
+                <div class="clear"></div>
+                <li><input id="btn_create_vm" class="btn_create_vm" type="button" name="submit" value=" 确 认 "/></li>
+            </ol>
+        </form>
+    </div>
+</div>
+<div class="theme-popover-mask"></div>
