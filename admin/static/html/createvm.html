@@ -8,29 +8,29 @@
             <ol>
                 <li id="createvm_title"><h4>虚拟机基本信息：</h4></li>
                 <div class="left_createvm">
-                    <li><label>名称：</label><input class="vmpara" type="text" name="name" value="" size="20"/></li>
-                    <li><label>模板：</label><select></select></li>
-                    <li><label>系统类型：</label><select>
+                    <li><label>名称：</label><input class="vmpara" id="vm_name" type="text" name="name" value="" size="20"/></li>
+                    <li><label>模板：</label><select id="select_template"></select></li>
+                    <li><label>系统类型：</label><select class="system_type" id="system_type" name="system">
                         <option>Windowx 7x64</option>
                         <option>Windowx 7</option>
                         <option>Windowx XP</option>
                         <option>Linux X86_64</option>
                         <option>Linux I386</option>
                     </select></li>
-                    <li><label>CPU：</label><select>
+                    <li><label>CPU：</label><select class="cpu" id="cpu" name="cpu">
                         <option>1</option>
                         <option>2</option>
                         <option>4</option>
                         <option>8</option>
                     </select>
-                    <li><label>内存(MB)：</label><input class="vmpara" type="text" name="memory" value="" size="20"/></li>
+                    <li><label>内存(MB)：</label><input class="vmpara" id="memory" type="text" name="memory" value="" size="20"/></li>
                 </div>
                 <div class="right_createvm">
-                    <li><label>网卡1：</label><select>
+                    <li><label>网卡1：</label><select class="nic1" id="nic1">
                         <option>Yes</option>
                         <option>No</option>
                     </select></li>
-                    <li><label>网卡2：</label><select>
+                    <li><label>网卡2：</label><select class="nic2" id="nic2">
                         <option>No</option>
                         <option>Yes</option>
                     </select></li>
@@ -38,7 +38,7 @@
                     </li>
                     <li><label>磁盘2(GB)：</label><input class="vmpara" type="text" name="template" value="" size="20"/>
                     </li>
-                    <li><label>所属用户：</label><select></select></li>
+                    <li><label>所属用户：</label><select class="owner" id="owner"></select></li>
                 </div>
                 <div class="clear"></div>
                 <li><input id="btn_create_vm" class="btn_create_vm" type="button" name="submit" value=" 确 认 "/></li>
