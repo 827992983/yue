@@ -144,14 +144,10 @@ def network(request):
             form = json.loads(request.body)
             print form
             db = Configure.objects.filter(key='network')
-            print 0
             if db is None or len(db) == 0:
-                print 1
                 result = net.update(network='vmbridge', device=form['dev'], ip=form['ip'], netmask=form['netmask'], gateway=form['gateway'], dns=form['dns'])
                 Configure.objects.create(key='network',value='vmbridge')
-                print 2
             if db is not None and len(db) == 1:
-                print 3
                 net.disable(Configure.objects.filter(key='network')[0].value)
                 result = net.update('vmbridge', form['dev'], form['ip'], form['netmask'], form['gateway'], form['dns'])
             return HttpResponse(json.dumps(ret))
@@ -217,17 +213,27 @@ def vm(request):
             ret['data'] = data
         elif request.method == "POST":
             form = json.loads(request.body)
-            id = utils.uuid()
-            Vm.objects.create(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
-                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
-                              templatename=form['templatename'],templatepath=form['templatepath'],
-                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
-                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
-                              yourself=form['yourself'])
+            vmid = utils.uuid()
+            print form
+            print vmid
+            template_path = ""
+            disk1_path = ""
+            disk2_path = ""
+            nic1_name = ""
+            nic2_name = ""
+            rs = Vm.objects.filter(name=form['name'])
+            if rs != None and len(rs) > 0:
+                ret = {'status':4003, 'msg':'vm have exist', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            Vm.objects.create(id=vmid,name=form['name'],cpu=form['cpu'],memory=form['memory'],
+                              user=form['user'],system=form['system'],
+                              templatename=form['templatename'],templatepath=template_path,
+                              nic1=nic1_name,nic2=nic2_name,disk1=form['disk1'],disk1path=disk1_path,
+                              disk2=form['disk2'],disk2path=disk2_path)
         elif request.method == "PUT":
             form = json.loads(request.body)
-            id = form['vmid']
-            Vm.objects.filter(vmid=id).update(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
+            vmid = form['vmid']
+            Vm.objects.filter(id=vmid).update(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
                               user=form['user'],istemplate=form['istemplate'],system=form['system'],
                               templatename=form['templatename'],templatepath=form['templatepath'],
                               nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],

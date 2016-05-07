@@ -14,9 +14,6 @@ import sys
 import socket
 import logging
 
-def uuid():
-    return ''
-
 def execShellCommand(cmd, wait=0, fast=False, verbose=False):
     """
     execute a linux shell command
@@ -33,6 +30,12 @@ def execShellCommand(cmd, wait=0, fast=False, verbose=False):
             sys.exit(1)
     
     return out, err, p.returncode
+
+def uuid():
+    out,err,errcode = execShellCommand("uuidgen")
+    if out.endswith("\n"):
+        out = out[:-1]
+    return out
 
 
 def checkPort(ip, port):

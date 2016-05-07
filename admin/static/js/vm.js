@@ -106,6 +106,8 @@ function createVm() {
         var index = selected.selectedIndex;
         if (index >= 0) {
             data.templatename = selected.options[index].value;
+        } else {
+            data.templatename = "";
         }
 
         selected = document.getElementById("system_type");
@@ -119,11 +121,21 @@ function createVm() {
 
         selected = document.getElementById("nic1");
         index = selected.selectedIndex;
-        data.nic1 = selected.options[index].value;
+        var nic1 = selected.options[index].value;
+        if (nic1 = "Yes") {
+            data.nic1 = "yes";
+        } else {
+            data.nic1 = "no";
+        }
 
         selected = document.getElementById("nic2");
         index = selected.selectedIndex;
-        data.nic2 = selected.options[index].value;
+        var nic2 = selected.options[index].value;
+        if (nic2 = "Yes") {
+            data.nic2 = "yes";
+        } else {
+            data.nic2 = "no";
+        }
 
         var disk1 = document.getElementById("disk1").value;
         if (disk1 == null || disk1 == "") {
@@ -142,14 +154,8 @@ function createVm() {
 
         selected = document.getElementById("owner");
         index = selected.selectedIndex;
-        data.owner = selected.options[index].value;
+        data.user = selected.options[index].value;
 
-        data.istemplate = "no";
-        data.yourself = "";
-        data.snapshotname = "";
-        data.snapshotpath = "";
-        data.templatepath = "";
-        data.id = "";
         alert(JSON.stringify(data))
         $.ajax({
             async: false,
@@ -160,6 +166,8 @@ function createVm() {
             success: function (result) {
                 if (result.status == 0) {
                     alert("创建虚拟机成功！")
+                } else if (result.status == 4003) {
+                    alert("虚拟机名称已经存在！");
                 } else {
                     alert("创建虚拟机失败！");
                 }
