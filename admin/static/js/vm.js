@@ -14,7 +14,7 @@ function getAllVms() {
             request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         },
         success: function (result) {
-            alert(JSON.stringify(result))
+            //alert(JSON.stringify(result))
         }
     });
 }
@@ -61,72 +61,113 @@ function createVm() {
         }
     });
 
+    $.ajax({
+        async: false,
+        url: "/templates",
+        dataType: "json",
+        method: "GET",
+        success: function (result) {
+            if (result.status == 0) {
+                var data = result.data;
+                var i = 0;
+                for (i = 0; i < data.length; i++) {
+                    var select_owner = document.getElementById("select_template");
+                    select_owner.add(new Option(data[i].templatename))
+                }
+            } else {
+                alert("获取虚拟机模板失败！")
+            }
+        }
+    });
+    $.ajax({
+        async: false,
+        url: "/users",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                var data = result.data;
+                var i = 0;
+                for (i = 0; i < data.length; i++) {
+                    var select_owner = document.getElementById("owner");
+                    select_owner.add(new Option(data[i].name))
+                }
+            } else {
+                alert("获取用户信息失败！")
+            }
+        }
+    });
+
     //$("#btn_create_vm").click(function () {} //jquery 方式
     document.getElementById("btn_create_vm").onclick = function () { //javascript方式
-        $.ajax({
-            async: false,
-            url: "/templates",
-            dataType: "json",
-            success: function (result) {
-                if (result.status == 0) {
-                    var data = result.data;
-                    var i = 0;
-                    for (i = 0; i < data.length; i++) {
-                        var select_owner = document.getElementById("select_template");
-                        select_owner.add(new Option(data[i].templatename))
-                    }
-                } else {
-                    alert("获取虚拟机模板失败！")
-                }
-            }
-        });
-        $.ajax({
-            async: false,
-            url: "/users",
-            dataType: "json",
-            success: function (result) {
-                if (result.status == 0) {
-                    var data = result.data;
-                    var i = 0;
-                    for (i = 0; i < data.length; i++) {
-                        var select_owner = document.getElementById("owner");
-                        select_owner.add(new Option(data[i].name))
-                    }
-                } else {
-                    alert("获取用户信息失败！")
-                }
-            }
-        });
-
         var data = new Object();
         data.name = document.getElementById("vm_name").value;
+
         var selected = document.getElementById("select_template")
         var index = selected.selectedIndex;
-        data.templatename = selected.options[index].value;
+        if (index >= 0) {
+            data.templatename = selected.options[index].value;
+        }
+
         selected = document.getElementById("system_type");
-        index = selected.selectedIndex;
-        data.system = selected.options[index].value;
+        data.system = selected.selectedIndex;
+
         selected = document.getElementById("cpu");
         index = selected.selectedIndex;
-        data.cpu = selected.options[index].value;
-        data.memory = document.getElementById("memory").value;
+        data.cpu = parseInt(selected.options[index].value);
+
+        data.memory = parseInt(document.getElementById("memory").value);
+
         selected = document.getElementById("nic1");
         index = selected.selectedIndex;
         data.nic1 = selected.options[index].value;
+
         selected = document.getElementById("nic2");
         index = selected.selectedIndex;
         data.nic2 = selected.options[index].value;
-        data.disk1 = document.getElementById("disk1").value;
-        data.disk2 = document.getElementById("disk2").value;
-        selected = document.getElementById("owners");
+
+        var disk1 = document.getElementById("disk1").value;
+        if (disk1 == null || disk1 == "") {
+            data.disk1 = 0;
+        } else {
+            data.disk1 = parseInt(disk1);
+        }
+        data.disk1 = parseInt(document.getElementById("disk1").value);
+
+        var disk2 = document.getElementById("disk2").value;
+        if (disk2 == null || disk2 == "") {
+            data.disk2 = 0;
+        } else {
+            data.disk2 = parseInt(disk2);
+        }
+
+        selected = document.getElementById("owner");
         index = selected.selectedIndex;
         data.owner = selected.options[index].value;
+
         data.istemplate = "no";
         data.yourself = "";
         data.snapshotname = "";
         data.snapshotpath = "";
         data.templatepath = "";
         data.id = "";
+        alert(JSON.stringify(data))
+        $.ajax({
+            async: false,
+            url: "/vm",
+            method: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 0) {
+                    alert("创建虚拟机成功！")
+                } else {
+                    alert("创建虚拟机失败！");
+                }
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+            }
+        });
     }
     getAllVms();
 }
