@@ -6,7 +6,7 @@
 
 function getAllVms() {
     $.ajax({
-        url: "/vm?vmid=all",
+        url: "/vms?vmid=all",
         method: "GET",
         async: false,
         dataType: "json",
@@ -60,7 +60,7 @@ function getAllVms() {
 
                 var stat = new Object();
                 $.ajax({
-                    url: "/status/vm?vmname=" + data[i].name,
+                    url: "/vm/status?vmname=" + data[i].name,
                     method: "GET",
                     async: false,
                     dataType: "json",
@@ -102,7 +102,7 @@ function getVm() {
     var data = new Object();
     data.vmid = "";
     $.ajax({
-        url: "/vm",
+        url: "/vms",
         method: "GET",
         async: false,
         data: JSON.stringify(data),
@@ -237,7 +237,7 @@ function createVm() {
 
         $.ajax({
             async: false,
-            url: "/vm",
+            url: "/vms",
             method: "POST",
             data: JSON.stringify(data),
             dataType: "json",
@@ -264,8 +264,41 @@ function editVm() {
 
 }
 
-function deleteVm() {
+function getSelectedVm() {
+    var list = document.getElementsByName("tr_vm");
+    var i = 0;
+    var ret = new Array();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            //if user is selected, get username
+            var username = list[i].childNodes[1].innerHTML;
+            ret.push(username);
+        }
+    }
 
+    return ret;
+}
+
+function deleteVm() {
+    var ret = getSelectedUser();
+
+    $.ajax({
+        async: false,
+        url: "/vm/delete",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("删除用户失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function startVm() {
