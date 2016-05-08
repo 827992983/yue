@@ -6,23 +6,49 @@
 
 import os
 import sys
+import yuelibs.utils as utils
 
-class Vm(object):
-    """
-    Vm description
+def getAllVmStatus():
+    ret = []
+    cmd = "ps -aux|grep enable-kvm"
+    out,err,errcode = utils.execShellCommand(cmd)
+    if errcode == 0:
+        out = utils.mergeMultiSpace(out)
+        li1 = out.split("\n")
+        for i in li1:
+            data = {}
+            li2 = i.split(' ')
+            for j in range(0, len(li2)-1):
+                if li2[j] == '-name':
+                    data['pid'] = li2[1]
+                    data['cpu'] = li2[2]
+                    data['memory'] = li2[3]
+                    data['name'] = li2[j+1]
+                    ret.append(data)
 
-    Convert to qemu command-line
-    """
-    def __init__(self, uuid, cpu, memory, image, spicePort, usbredir=4):
-        self.__uuid = uuid
-        self.__cpu = cpu
-        self.__memory = memory
-        self.__image = image
-        self.__spicePort
-        self.__usbredir = usbredir
+    return ret
 
-    def __str__(self):
-        pass
+def getVmStatus(vmname):
+    data = {}
+    cmd = "ps -ef|grep enable-kvm|grep %s" % (vmname,)
+    out,err,errcode = utils.execShellCommand(cmd)
+    if errcode == 0:
+        out = utils.mergeMultiSpace(out)
+        li1 = out.split("\n")
+        for i in li1:
+            li2 = i.split(' ')
+            for j in range(0, len(li2)-1):
+                if li2[j] == '-name':
+                    data['pid'] = li2[1]
+                    data['cpu'] = li2[2]
+                    data['memory'] = li2[3]
+                    data['name'] = li2[j+1]
+                    data['status'] = "running"
+                    return data
 
-    def toDict(self):
-        pass
+    data['pid'] = "0"
+    data['cpu'] = "0"
+    data['memory'] = "0"
+    data['name'] = vmname
+    data['status'] = 'stop'
+    return data

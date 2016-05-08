@@ -37,6 +37,12 @@ def uuid():
         out = out[:-1]
     return out
 
+def mergeMultiSpace(s):
+    while True:
+        s1 = s.replace('  ', ' ')
+        if s == s1:
+            return s
+        s = s1
 
 def checkPort(ip, port):
     """
@@ -198,5 +204,3 @@ def tobool(s):
         return bool(int(s))
     except:
         return False
-
-

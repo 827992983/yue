@@ -14,7 +14,86 @@ function getAllVms() {
             request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         },
         success: function (result) {
-            //alert(JSON.stringify(result))
+            var table = document.getElementById("table_vm");
+            var data = result.data;
+            var i = 0;
+            for (i = 0; i < data.length; i++) {
+                var tr = document.createElement("tr");
+                tr.setAttribute("name", "tr_vm");
+                table.appendChild(tr);
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_number");
+                td.setAttribute("class", "td_vm_title");
+                tr.appendChild(td);
+                var chkbox = document.createElement("input");
+                chkbox.setAttribute("type", "checkbox");
+                chkbox.setAttribute("name", "select_vm");
+                td.appendChild(chkbox);
+                var span = document.createElement("span");
+                span.innerHTML = "&nbsp;&nbsp;&nbsp;" + i.toString()
+                td.appendChild(span);
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_vmname");
+                td.setAttribute("class", "td_vm_title");
+                td.innerHTML = data[i].name;
+                tr.appendChild(td);
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_vmname");
+                td.setAttribute("class", "td_vm_title");
+                if (data[i].system == 0) {
+                    td.innerHTML = "Windows 7_x64"
+                } else if (data[i].system == 1) {
+                    td.innerHTML = "Windows 7"
+                } else if (data[i].system == 2) {
+                    td.innerHTML = "Windows XP"
+                } else if (data[i].system == 3) {
+                    td.innerHTML = "Linux x86_64";
+                } else if (data[i].system == 4) {
+                    td.innerHTML = "Linux i386";
+                } else {
+                    td.innerHTML = "unknown";
+                }
+                tr.appendChild(td);
+
+                var stat = new Object();
+                $.ajax({
+                    url: "/status/vm?vmname=" + data[i].name,
+                    method: "GET",
+                    async: false,
+                    dataType: "json",
+                    beforeSend: function (request) {
+                        request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+                    },
+                    success: function (result) {
+                        if (result.status == 0) {
+                            stat = result.data;
+                        } else {
+                            alert("获取虚拟机状态失败");
+                        }
+                    }
+                });
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_vmstatus");
+                td.setAttribute("class", "td_vm_title");
+                td.innerHTML = stat.status;
+                tr.appendChild(td);
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_vmcpu");
+                td.setAttribute("class", "td_vm_title");
+                td.innerHTML = stat.cpu;
+                tr.appendChild(td);
+
+                var td = document.createElement('td');
+                td.setAttribute("name", "td_vmmemory");
+                td.setAttribute("class", "td_vm_title");
+                td.innerHTML = stat.memory;
+                tr.appendChild(td);
+            }
         }
     });
 }
@@ -22,7 +101,6 @@ function getAllVms() {
 function getVm() {
     var data = new Object();
     data.vmid = "";
-    alert(JSON.stringify(data))
     $.ajax({
         url: "/vm",
         method: "GET",
@@ -79,6 +157,7 @@ function createVm() {
             }
         }
     });
+
     $.ajax({
         async: false,
         url: "/users",
@@ -156,7 +235,6 @@ function createVm() {
         index = selected.selectedIndex;
         data.user = selected.options[index].value;
 
-        alert(JSON.stringify(data))
         $.ajax({
             async: false,
             url: "/vm",
@@ -166,6 +244,9 @@ function createVm() {
             success: function (result) {
                 if (result.status == 0) {
                     alert("创建虚拟机成功！")
+                    $('.theme-popover-mask').fadeOut(100);
+                    $('.theme-popover').slideUp(200);
+                    window.location.reload();//刷新页面的方法
                 } else if (result.status == 4003) {
                     alert("虚拟机名称已经存在！");
                 } else {
@@ -177,7 +258,6 @@ function createVm() {
             }
         });
     }
-    getAllVms();
 }
 
 function editVm() {

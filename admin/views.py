@@ -9,6 +9,7 @@ from config import sysconfig
 from storage import localfs
 from net import net
 from yuelibs import utils
+import vm.vm as vmop
 # Create your views here.
 
 def index(request):
@@ -310,4 +311,22 @@ def template(request):
         print e
 
     ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm_status(request):
+    ret = {'status':0, 'msg':'vm operation success', 'data': {}}
+    data = []
+    print 'vm status request'
+    print request.GET['vmname']
+    try:
+        if request.method == "GET":
+            if request.GET['vmname'] == 'all':
+                ret['data'] = vmop.getAllVmStatus()
+            else:
+                ret['data'] = vmop.getVmStatus(request.GET['vmname'])
+            print ret
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+    ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
