@@ -20,6 +20,7 @@ function getAllVms() {
             for (i = 0; i < data.length; i++) {
                 var tr = document.createElement("tr");
                 tr.setAttribute("name", "tr_vm");
+                tr.setAttribute("class", "tr_vm");
                 table.appendChild(tr);
 
                 var td = document.createElement('td');
@@ -28,6 +29,7 @@ function getAllVms() {
                 tr.appendChild(td);
                 var chkbox = document.createElement("input");
                 chkbox.setAttribute("type", "checkbox");
+                chkbox.setAttribute("class", "checkbox_vm");
                 chkbox.setAttribute("name", "select_vm");
                 td.appendChild(chkbox);
                 var span = document.createElement("span");
@@ -95,6 +97,30 @@ function getAllVms() {
                 tr.appendChild(td);
             }
         }
+    });
+
+    $("table tr:gt(0)").hover(function () { //tr:gt(0)表示不选第一行，因为第一行往往是标题
+        var vmname = $(this).find("td:eq(1)").text();
+        var vminfo = getVmInfo(vmname);
+        //alert(JSON.stringify(vminfo));
+        document.getElementById("vm_desc_user").innerHTML = vminfo.user;
+        document.getElementById("vm_desc_template").innerHTML = vminfo.templatename;
+        document.getElementById("vm_desc_istemplate").innerHTML = vminfo.istemplate;
+        document.getElementById("vm_desc_cpu").innerHTML = vminfo.cpu;
+        document.getElementById("vm_desc_memory").innerHTML = vminfo.memory;
+        var nic = ""
+        if(vminfo.nic1 == "yes"){
+            nic = "nic1";
+        }
+        if(vminfo.nic2 == "yes"){
+            nic = nic + ",nic2"
+        }
+        document.getElementById("vm_desc_nic").innerHTML = nic;
+        document.getElementById("vm_desc_disk1").innerHTML = vminfo.disk1;
+        document.getElementById("vm_desc_disk2").innerHTML = vminfo.disk2;
+        document.getElementById("vm_desc_snapshort").innerHTML = vminfo.snapshotpath;
+    }, function () {
+
     });
 }
 
