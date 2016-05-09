@@ -6,7 +6,7 @@
 
 function getAllVms() {
     $.ajax({
-        url: "/vms?vmid=all",
+        url: "/vms?vmname=all",
         method: "GET",
         async: false,
         dataType: "json",
@@ -98,22 +98,24 @@ function getAllVms() {
     });
 }
 
-function getVm() {
-    var data = new Object();
-    data.vmid = "";
+function getVmInfo(vmname) {
+    var ret = {};
     $.ajax({
-        url: "/vms",
+        url: "/vms?vmname=" + vmname,
         method: "GET",
         async: false,
-        data: JSON.stringify(data),
         dataType: "json",
         beforeSend: function (request) {
             request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         },
         success: function (result) {
-            //alert(JSON.stringify(result))
+            if (result.data.length == 1) {
+                ret = result.data[0];
+            }
         }
     });
+
+    return ret;
 }
 
 function createVm() {
@@ -243,7 +245,6 @@ function createVm() {
             dataType: "json",
             success: function (result) {
                 if (result.status == 0) {
-                    alert("创建虚拟机成功！")
                     $('.theme-popover-mask').fadeOut(100);
                     $('.theme-popover').slideUp(200);
                     window.location.reload();//刷新页面的方法
@@ -260,8 +261,171 @@ function createVm() {
     }
 }
 
-function editVm() {
+function getSelectedVmName() {
+    var list = document.getElementsByName("tr_vm");
+    var i = 0;
+    var data = new Object();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            //if user is selected, get username
+            var val = list[i].childNodes[1].innerHTML;
+            data.name = val;
+        }
+    }
 
+    return data;
+}
+
+function editVm() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择一个VM进行编辑！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("仅仅能选择一个VM进行编辑！");
+        return;
+    }
+
+    var vmname = getSelectedVmName().name;
+
+    $.ajax({
+        async: false,
+        url: "static/html/editvm.html",
+        dataType: "text",
+        success: function (result) {
+            var node = document.getElementById("mainsession");
+            var div = document.createElement("div");
+            div.innerHTML = result;
+            node.appendChild(div);
+            var vminfo = getVmInfo(vmname);
+            document.getElementById("vm_name").value = vminfo.name;
+            //document.getElementById("vm_name").setAttribute("disabled", "disabled");
+
+            if (vminfo.templatename != "") {
+                document.getElementById("select_template").add(new Option(vminfo.templatename));
+            }
+            document.getElementById("select_template").setAttribute("disabled", "disabled");
+
+            document.getElementById("system_type").options[vminfo.system].selected = true;
+            document.getElementById("system_type").setAttribute("disabled", "disabled");
+
+            if (vminfo.disk1 > 0) {
+                document.getElementById("disk1").value = vminfo.disk1;
+                document.getElementById("disk1").setAttribute("disabled", "disabled");
+            }
+
+            if (vminfo.disk2 > 0) {
+                document.getElementById("disk2").value = vminfo.disk2;
+                document.getElementById("disk2").setAttribute("disabled", "disabled");
+            }
+            $.ajax({
+                async: false,
+                url: "/users",
+                dataType: "json",
+                success: function (result) {
+                    if (result.status == 0) {
+                        var data = result.data;
+                        var i = 0;
+                        for (i = 0; i < data.length; i++) {
+                            var select_owner = document.getElementById("owner");
+                            select_owner.add(new Option(data[i].name))
+                        }
+                    } else {
+                        alert("获取用户信息失败！")
+                    }
+                }
+            });
+
+            $('.theme-popover-mask').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+
+            document.getElementById("btn_edit_vm").onclick = function () {
+                var data = new Object();
+                data.name = document.getElementById("vm_name").value;
+
+                var selected = document.getElementById("select_template")
+                var index = selected.selectedIndex;
+                if (index >= 0) {
+                    data.templatename = selected.options[index].value;
+                } else {
+                    data.templatename = "";
+                }
+
+                selected = document.getElementById("system_type");
+                data.system = selected.selectedIndex;
+
+                selected = document.getElementById("cpu");
+                index = selected.selectedIndex;
+                data.cpu = parseInt(selected.options[index].value);
+
+                data.memory = parseInt(document.getElementById("memory").value);
+
+                selected = document.getElementById("nic1");
+                index = selected.selectedIndex;
+                var nic1 = selected.options[index].value;
+                if (nic1 = "Yes") {
+                    data.nic1 = "yes";
+                } else {
+                    data.nic1 = "no";
+                }
+
+                selected = document.getElementById("nic2");
+                index = selected.selectedIndex;
+                var nic2 = selected.options[index].value;
+                if (nic2 = "Yes") {
+                    data.nic2 = "yes";
+                } else {
+                    data.nic2 = "no";
+                }
+
+                var disk1 = document.getElementById("disk1").value;
+                if (disk1 == null || disk1 == "") {
+                    data.disk1 = 0;
+                } else {
+                    data.disk1 = parseInt(disk1);
+                }
+                data.disk1 = parseInt(document.getElementById("disk1").value);
+
+                var disk2 = document.getElementById("disk2").value;
+                if (disk2 == null || disk2 == "") {
+                    data.disk2 = 0;
+                } else {
+                    data.disk2 = parseInt(disk2);
+                }
+
+                selected = document.getElementById("owner");
+                index = selected.selectedIndex;
+                data.user = selected.options[index].value;
+
+                $.ajax({
+                    async: false,
+                    url: "/vm/edit",
+                    method: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.status == 0) {
+                            $('.theme-popover-mask').fadeOut(100);
+                            $('.theme-popover').slideUp(200);
+                            window.location.reload();//刷新页面的方法
+                        } else {
+                            alert("编辑虚拟机失败！");
+                        }
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+                    }
+                });
+            }
+
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+                window.location.reload();
+            })
+        }
+    });
 }
 
 function getSelectedVm() {
@@ -280,8 +444,7 @@ function getSelectedVm() {
 }
 
 function deleteVm() {
-    var ret = getSelectedUser();
-
+    var ret = getSelectedVm();
     $.ajax({
         async: false,
         url: "/vm/delete",
@@ -292,7 +455,7 @@ function deleteVm() {
             if (result.status == 0) {
                 window.location.reload();
             } else {
-                alert("删除用户失败！");
+                alert("删除虚拟机失败！");
             }
         },
         beforeSend: function (xhr) {

@@ -166,7 +166,7 @@ def vm(request):
     try:
         if request.method == "GET":
             print request.GET
-            if request.GET['vmid'] == 'all':
+            if request.GET['vmname'] == 'all':
                 vms = Vm.objects.all()
                 if vms is None or len(vms)<1:
                     pass
@@ -191,8 +191,8 @@ def vm(request):
                         vminfo['yourself'] = elem.yourself
                         data.append(vminfo)
             else:
-                id = request.GET['vmid']
-                elem = Vm.objects.filter(vmid=id)[0]
+                vmname = request.GET['vmname']
+                elem = Vm.objects.filter(name=vmname)[0]
                 vminfo = {}
                 vminfo['vmid'] = elem.id
                 vminfo['name'] = elem.name
@@ -215,8 +215,6 @@ def vm(request):
         elif request.method == "POST":
             form = json.loads(request.body)
             vmid = utils.uuid()
-            print form
-            print vmid
             template_path = ""
             disk1_path = ""
             disk2_path = ""
@@ -231,19 +229,6 @@ def vm(request):
                               templatename=form['templatename'],templatepath=template_path,
                               nic1=nic1_name,nic2=nic2_name,disk1=form['disk1'],disk1path=disk1_path,
                               disk2=form['disk2'],disk2path=disk2_path)
-        elif request.method == "PUT":
-            form = json.loads(request.body)
-            vmid = form['vmid']
-            Vm.objects.filter(id=vmid).update(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
-                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
-                              templatename=form['templatename'],templatepath=form['templatepath'],
-                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
-                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
-                              yourself=form['yourself'])
-        elif request.method == "DELETE":
-            form = json.loads(request.body)
-            for id in form:
-                Vm.objects.filter(vmid=id).delete()
         else:
             pass
         return HttpResponse(json.dumps(ret))
@@ -328,5 +313,35 @@ def vm_status(request):
             return HttpResponse(json.dumps(ret))
     except:
         pass
+    ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm_delete(request):
+    ret = {'status':0, 'msg':'vm delete success', 'data': {}}
+    data = []
+    print 'vm delete request'
+    try:
+        if request.method == "POST":
+            form = json.loads(request.body)
+            print form
+            for elem in form:
+                Vm.objects.filter(name=elem).delete()
+            return HttpResponse(json.dumps(ret))
+    except:
+        pass
+    ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm_edit(request):
+    ret = {'status':0, 'msg':'vm edit success', 'data': {}}
+    try:
+        if request.method == "POST":
+            form = json.loads(request.body)
+            Vm.objects.filter(name=form['name']).update(name=form['name'],cpu=form['cpu'],memory=form['memory'],
+                              user=form['user'],nic1=form['nic1'],nic2=form['nic2'],
+                              disk1=form['disk1'],disk2=form['disk2'])
+            return HttpResponse(json.dumps(ret))
+    except Exception,e:
+        print e
     ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
