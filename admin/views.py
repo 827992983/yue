@@ -329,7 +329,7 @@ def vm_delete(request):
             return HttpResponse(json.dumps(ret))
     except:
         pass
-    ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
+    ret = {'status': 4202, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
 def vm_edit(request):
@@ -343,5 +343,20 @@ def vm_edit(request):
             return HttpResponse(json.dumps(ret))
     except Exception,e:
         print e
-    ret = {'status': 4102, 'msg': 'unknown except', 'data': {}}
+    ret = {'status': 4302, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm_start(request):
+    ret = {'status':0, 'msg':'vm start success', 'data': {}}
+    data = []
+    print 'vm start request'
+    try:
+        if request.method == "POST":
+            form = json.loads(request.body)
+            for elem in form:
+                vminfo = Vm.objects.filter(name=elem)[0]
+        return HttpResponse(json.dumps(ret))
+    except:
+        pass
+    ret = {'status': 4402, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))

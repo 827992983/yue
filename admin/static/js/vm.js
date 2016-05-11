@@ -109,10 +109,10 @@ function getAllVms() {
         document.getElementById("vm_desc_cpu").innerHTML = vminfo.cpu;
         document.getElementById("vm_desc_memory").innerHTML = vminfo.memory;
         var nic = ""
-        if(vminfo.nic1 == "yes"){
+        if (vminfo.nic1 == "yes") {
             nic = "nic1";
         }
-        if(vminfo.nic2 == "yes"){
+        if (vminfo.nic2 == "yes") {
             nic = nic + ",nic2"
         }
         document.getElementById("vm_desc_nic").innerHTML = nic;
@@ -293,7 +293,6 @@ function getSelectedVmName() {
     var data = new Object();
     for (i = 0; i < list.length; i++) {
         if (list[i].firstChild.firstChild.checked) {
-            //if user is selected, get username
             var val = list[i].childNodes[1].innerHTML;
             data.name = val;
         }
@@ -460,9 +459,8 @@ function getSelectedVm() {
     var ret = new Array();
     for (i = 0; i < list.length; i++) {
         if (list[i].firstChild.firstChild.checked) {
-            //if user is selected, get username
-            var username = list[i].childNodes[1].innerHTML;
-            ret.push(username);
+            var vmname = list[i].childNodes[1].innerHTML;
+            ret.push(vmname);
         }
     }
 
@@ -491,7 +489,29 @@ function deleteVm() {
 }
 
 function startVm() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择一个VM！");
+        return;
+    }
 
+    $.ajax({
+        async: false,
+        url: "/vm/start",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function connectVm() {

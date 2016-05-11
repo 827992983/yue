@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^vm/status', admin_views.vm_status, name='vm_status'),
     url(r'^vm/edit', admin_views.vm_edit, name='vm_edit'),
     url(r'^vm/delete', admin_views.vm_delete, name='vm_delete'),
+    url(r'^vm/start', admin_views.vm_start, name='vm_start'),
     url(r'^users', login_views.users, name='users'),
     url(r'^user/create', login_views.create_user, name='create_user'),
     url(r'^user/delete', login_views.delete_user, name='delete_user'),
