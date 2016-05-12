@@ -491,7 +491,7 @@ function deleteVm() {
 function startVm() {
     var ret = getSelectedVm();
     if (ret.length == 0) {
-        alert("请选择一个VM！");
+        alert("请选择要启动的VM！");
         return;
     }
 
@@ -515,25 +515,153 @@ function startVm() {
 }
 
 function connectVm() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要连接的VM！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("只能选择1个VM！");
+        return;
+    }
+
 
 }
 
 function stopVm() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要关机的VM！");
+        return;
+    }
 
+    $.ajax({
+        async: false,
+        url: "/vm/stop",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function createSnapshot() {
-
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要创建快照的VM！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("只能选择1个VM创建快照！");
+        return;
+    }
+    $.ajax({
+        async: false,
+        url: "/vm/remplate",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function deleteSnapshot() {
-
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要删除快照的VM！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("只能选择1个VM删除快照！");
+        return;
+    }
+    $.ajax({
+        async: false,
+        url: "/vm/snapshot",
+        method: "DELETE",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function createTemplate() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要创建模板的VM！");
+        return;
+    }
 
+    $.ajax({
+        async: false,
+        url: "/vm/stop",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }
 
 function addIso() {
-
+    if (ret.length == 0) {
+        alert("请选择要删除快照的VM！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("只能选择1个VM删除快照！");
+        return;
+    }
+    $.ajax({
+        async: false,
+        url: "/iso",
+        method: "post",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("启动虚拟机失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
 }

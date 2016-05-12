@@ -298,6 +298,23 @@ def template(request):
     ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
+def snapshot(request):
+    ret = {'status':0, 'msg':'vm snapshot success', 'data': {}}
+    data = []
+    print 'template request'
+    try:
+        if request.method == "GET":
+            pass
+        elif request.method == "POST":
+            pass
+        else:
+            pass
+    except:
+        pass
+
+    return HttpResponse(json.dumps(ret))
+
+
 def vm_status(request):
     ret = {'status':0, 'msg':'vm operation success', 'data': {}}
     data = []
@@ -359,4 +376,35 @@ def vm_start(request):
     except:
         pass
     ret = {'status': 4402, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def vm_stop(request):
+    ret = {'status':0, 'msg':'vm stop success', 'data': {}}
+    data = []
+    print 'vm start request'
+    try:
+        if request.method == "POST":
+            form = json.loads(request.body)
+            for elem in form:
+                vminfo = Vm.objects.filter(name=elem)[0]
+        return HttpResponse(json.dumps(ret))
+    except:
+        pass
+    ret = {'status': 4402, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
+def iso(request):
+    ret = {'status':0, 'msg':'vm snapshot success', 'data': {}}
+    data = []
+    print 'template request'
+    try:
+        if request.method == "GET":
+            pass
+        elif request.method == "POST":
+            pass
+        else:
+            pass
+    except:
+        pass
+
     return HttpResponse(json.dumps(ret))
