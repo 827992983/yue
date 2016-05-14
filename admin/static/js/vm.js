@@ -639,12 +639,13 @@ function createTemplate() {
 }
 
 function addIso() {
+    var ret = getSelectedVm();
     if (ret.length == 0) {
-        alert("请选择要删除快照的VM！");
+        alert("请选择要挂载光盘的VM！");
         return;
     }
     if (ret.length != 1) {
-        alert("只能选择1个VM删除快照！");
+        alert("只能选择1个VM挂载光盘！");
         return;
     }
     $.ajax({
@@ -657,7 +658,7 @@ function addIso() {
             if (result.status == 0) {
                 window.location.reload();
             } else {
-                alert("启动虚拟机失败！");
+                alert("挂载光盘失败！");
             }
         },
         beforeSend: function (xhr) {
