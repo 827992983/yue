@@ -4,9 +4,12 @@
 #date: 2016
 #Copyright: free
 
-import os
-import sys
 import yuelibs.utils as utils
+
+def vmStart(engine, name, cpu, memory, storage, disk1, disk2="", template="", nic1="", nic2="", iso=""):
+    cmd = engine
+    cmd = cmd + " -name %s -enable-kvm -smp %s -m %s " % (name, cpu, memory)
+    
 
 def getAllVmStatus():
     ret = []

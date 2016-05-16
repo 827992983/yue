@@ -8,7 +8,6 @@ import os
 import commands
 import ConfigParser
 import time
-import threading
 import subprocess
 import sys
 import socket
