@@ -10,6 +10,8 @@ from storage import localfs
 from net import net
 from yuelibs import utils
 import vm.vm as vmop
+import os
+import vm.qemuimg as qemuimg
 # Create your views here.
 
 def index(request):
@@ -107,6 +109,10 @@ def storage(request):
             if  st is not None and len(st) > 0:
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
+            st = Storage.objects.filter(type='data')
+            if  st is not None and len(st) > 0:
+                ret = {'status':3003, 'msg':'data storage only have one', 'data': {}}
+                return HttpResponse(json.dumps(ret))
             st = localfs.LocalFsStorage(form['path'], True)
             Storage.objects.create(path=form['path'], type=form['type'])
             return HttpResponse(json.dumps(ret))
@@ -120,7 +126,7 @@ def storage(request):
     except Exception,e:
         print e
 
-    ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
+    ret = {'status': 3004, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
 def network(request):
@@ -224,6 +230,15 @@ def vm(request):
             if rs != None and len(rs) > 0:
                 ret = {'status':4003, 'msg':'vm have exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
+            storage_path = Storage.objects.filter(type='data')[0].path
+            disk_path = os.path.join(storage_path, vmid)
+            disk1_path = os.path.join(disk_path, 'disk1.qcow2')
+            print "disk1_path=%s" % (disk1_path)
+            qemuimg.create(disk1_path, 'qcow2')
+            if disk2_path != None and len(disk2_path) > 0:
+                disk2_path = os.path.join(disk_path, 'disk2.qcow2')
+                print disk2_path
+                qemuimg.create(disk1_path, 'qcow2')
             Vm.objects.create(id=vmid,name=form['name'],cpu=form['cpu'],memory=form['memory'],
                               user=form['user'],system=form['system'],
                               templatename=form['templatename'],templatepath=template_path,
@@ -372,6 +387,10 @@ def vm_start(request):
             form = json.loads(request.body)
             for elem in form:
                 vminfo = Vm.objects.filter(name=elem)[0]
+                engine = Configure.objects.get(key='engine').value
+                iso = ""
+                vmop.vmStart(engine, vminfo.name, vminfo.vmid, vminfo.cpu, vminfo.memory, vminfo.disk1path,
+                             vminfo.disk2path, vminfo.nic1, vminfo.nic2, iso)
         return HttpResponse(json.dumps(ret))
     except:
         pass
