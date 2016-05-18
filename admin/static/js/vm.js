@@ -87,13 +87,13 @@ function getAllVms() {
                 var td = document.createElement('td');
                 td.setAttribute("name", "td_vmcpu");
                 td.setAttribute("class", "td_vm_title");
-                td.innerHTML = stat.cpu;
+                td.innerHTML = stat.cpu + " %";
                 tr.appendChild(td);
 
                 var td = document.createElement('td');
                 td.setAttribute("name", "td_vmmemory");
                 td.setAttribute("class", "td_vm_title");
-                td.innerHTML = stat.memory;
+                td.innerHTML = stat.memory + " %";
                 tr.appendChild(td);
             }
         }

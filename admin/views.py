@@ -230,12 +230,14 @@ def vm(request):
             if rs != None and len(rs) > 0:
                 ret = {'status':4003, 'msg':'vm have exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
-            storage_path = Storage.objects.filter(type='data')[0].path
-            disk_path = os.path.join(storage_path, vmid)
+            storage_path = Storage.objects.filter(type='local')[0].path
+            image_path = os.path.join(storage_path, 'image')
+            disk_path = os.path.join(image_path, vmid)
+            os.mkdir(disk_path)
             disk1_path = os.path.join(disk_path, 'disk1.qcow2')
             print "disk1_path=%s" % (disk1_path)
-            qemuimg.create(disk1_path, 'qcow2')
-            if disk2_path != None and len(disk2_path) > 0:
+            qemuimg.create(disk1_path, form['disk1'], 'qcow2')
+            if form['disk2'] != None and form['disk2'] > 0:
                 disk2_path = os.path.join(disk_path, 'disk2.qcow2')
                 print disk2_path
                 qemuimg.create(disk1_path, 'qcow2')
@@ -385,15 +387,17 @@ def vm_start(request):
     try:
         if request.method == "POST":
             form = json.loads(request.body)
+            print form
             for elem in form:
                 vminfo = Vm.objects.filter(name=elem)[0]
                 engine = Configure.objects.get(key='engine').value
+                print engine
                 iso = ""
-                vmop.vmStart(engine, vminfo.name, vminfo.vmid, vminfo.cpu, vminfo.memory, vminfo.disk1path,
-                             vminfo.disk2path, vminfo.nic1, vminfo.nic2, iso)
+                port = 3000
+                vmop.vmStart(engine, vminfo.name, vminfo.id, vminfo.cpu, vminfo.memory, vminfo.disk1path, port)
         return HttpResponse(json.dumps(ret))
-    except:
-        pass
+    except Exception,e:
+        print e
     ret = {'status': 4402, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 

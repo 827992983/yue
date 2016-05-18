@@ -35,7 +35,9 @@ def create(image, size=None, format=None, backing=None):
             return -1
         cmd = cmd + "-o backing_file=%s " % (backing,)
 
-    cmd = cmd + " %s %dG" % (image, size)
+    cmd = cmd + " %s %sG" % (image, str(size))
+
+    print cmd
 
     out, err, rc = utils.execShellCommand(cmd)
 

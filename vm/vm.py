@@ -4,6 +4,7 @@
 #date: 2016
 #Copyright: free
 
+import  os
 import yuelibs.utils as utils
 
 #/usr/libexec/qemu-kvm -name CTVM -cpu Westmere,+vmx -enable-kvm -m 2048 -smp 2 -spice port=5930,disable-ticketing -vga qxl
@@ -12,7 +13,15 @@ import yuelibs.utils as utils
 def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="", nic1="", nic2="", iso=""):
     diskIndex = 0
 
-    cmd = engine
+    print "vmStart"
+    print "engine=%s, name=%s, vmid=%s, cpu=%s, memory=%s, disk1=%s, port=%s, disk2=%s, template=%s, nic1=%s, nic2=%s, iso=%s" % (engine, name, vmid, cpu, memory, disk1, port, disk2, template, nic1, nic2, iso)
+
+    cmd = ""
+    if engine=='qemu-kvm':
+        cmd = os.path.join("/usr/libexec/",engine)
+    else:
+        cmd = engine
+
     cmd = cmd + " -name %s -enable-kvm -smp %s -m %s " % (name, cpu, memory)
 
     if iso is not None and len(iso) > 0:
@@ -32,17 +41,14 @@ def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="",
     if nic2:
         nic1 = "-net nic,macaddr=%s,model=rtl8139 -net tap,ifname=%s " % (nic2['mac'], nic2['name'])
 
-    if port > 3000:
+    if port >= 3000:
         cmd = cmd + " -spice port=%s,disable-ticketing " % (str(port))
 
     cmd = cmd + " -vga qxl &"
 
     print cmd
-    out, err, rc = utils.execShellCommand(cmd)
-    if rc == 0:
-        return 0
-    else:
-        return -1
+    utils.createThread(utils.execShellCommand, cmd)
+    return 0
 
 def getAllVmStatus():
     ret = []
@@ -56,18 +62,20 @@ def getAllVmStatus():
             li2 = i.split(' ')
             for j in range(0, len(li2)-1):
                 if li2[j] == '-name':
+                    print li2
                     data['pid'] = li2[1]
                     data['cpu'] = li2[2]
                     data['memory'] = li2[3]
                     data['name'] = li2[j+1]
                     ret.append(data)
-
+    print ret
     return ret
 
 def getVmStatus(vmname):
     data = {}
-    cmd = "ps -ef|grep enable-kvm|grep %s" % (vmname,)
+    cmd = "ps -aux|grep enable-kvm|grep %s" % (vmname,)
     out,err,errcode = utils.execShellCommand(cmd)
+    print out
     if errcode == 0:
         out = utils.mergeMultiSpace(out)
         li1 = out.split("\n")

@@ -12,6 +12,34 @@ import subprocess
 import sys
 import socket
 import logging
+import threading
+
+def createThread(callback, *args):
+    th = threading.Thread(target=callback, args=args)
+    th.setDaemon(True)
+    th.start()
+
+def createThread1(callback, *args):
+    class NewThread(threading.Thread):
+        def __init__(self, callback, *args):
+            #super(threading.Thread, self).__init__()
+            threading.Thread.__init__(self)
+            self.callback = callback
+            self.args = args
+
+        def run(self):
+            self.callback(*self.args)
+
+    th = NewThread(callback, *args)
+    #th.setDaemon(True)
+    th.start()
+
+def sleep(seconds):
+    time.sleep(seconds)
+
+def usleep(micSeconds):
+    val = micSeconds/1000000.0
+    time.sleep(val)
 
 def execShellCommand(cmd, wait=0, fast=False, verbose=False):
     """
