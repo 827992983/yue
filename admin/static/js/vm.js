@@ -514,6 +514,23 @@ function startVm() {
     })
 }
 
+function getVmConnInfo(vmname){
+    $.ajax({
+        url: "/conninfo?vmname=" + vmname,
+        method: "GET",
+        async: false,
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            if (result.data.length == 1) {
+                ret = result.data[0];
+            }
+        }
+    });
+}
+
 function connectVm() {
     var ret = getSelectedVm();
     if (ret.length == 0) {
@@ -525,7 +542,14 @@ function connectVm() {
         return;
     }
 
+    var vmname = getSelectedVmName().name;
+    alert(vmname);
+    var vmConnInfo = getVmConnInfo(vmname);
+    var hostname = vmConnInfo.hostname;
+    var port = vmConnInfo.port;
 
+    var para = "?hostname=" + hostname + "&port=" + port;
+    window.open("spice-html5/spice.html" + para);
 }
 
 function stopVm() {

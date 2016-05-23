@@ -39,3 +39,11 @@ class Vm(models.Model):
 
     def __unicode__(self):
         return self.id
+
+class VmPort(models.Model):
+    vmname = models.CharField(max_length=64, primary_key=True)
+    port = models.IntegerField(default=-1)
+    mapport = models.IntegerField(default=-1)
+
+    def __unicode__(self):
+        return self.vmname

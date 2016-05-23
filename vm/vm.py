@@ -50,6 +50,9 @@ def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="",
     utils.createThread(utils.execShellCommand, cmd)
     return 0
 
+def vmStartProxy(port, mapport):
+    
+
 def getAllVmStatus():
     ret = []
     cmd = "ps -aux|grep enable-kvm"

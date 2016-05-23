@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^vm/stop', admin_views.vm_stop, name='vm_stop'),
     url(r'^vm/template', admin_views.template, name='template'),
     url(r'^vm/snapshot', admin_views.snapshot, name='snapshot'),
+    url(r'^vm/conninfo', admin_views.connect_info, name='conninfo'),
     url(r'^iso', admin_views.iso, name='iso'),
     url(r'^users', login_views.users, name='users'),
     url(r'^user/create', login_views.create_user, name='create_user'),

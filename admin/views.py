@@ -5,6 +5,7 @@ from login.models import User
 from .models import Configure
 from .models import Storage
 from .models import Vm
+from .models import VmPort
 from config import sysconfig
 from storage import localfs
 from net import net
@@ -233,6 +234,7 @@ def vm(request):
             storage_path = Storage.objects.filter(type='local')[0].path
             image_path = os.path.join(storage_path, 'image')
             disk_path = os.path.join(image_path, vmid)
+            print 'disk_path=%s' % disk_path
             os.mkdir(disk_path)
             disk1_path = os.path.join(disk_path, 'disk1.qcow2')
             print "disk1_path=%s" % (disk1_path)
@@ -246,6 +248,15 @@ def vm(request):
                               templatename=form['templatename'],templatepath=template_path,
                               nic1=nic1_name,nic2=nic2_name,disk1=form['disk1'],disk1path=disk1_path,
                               disk2=form['disk2'],disk2path=disk2_path)
+            port = 11000
+            mapport = 21000
+            for i in range(11000,12000):
+                vmports = VmPort.objects.filter(port=i)
+                if len(vmports) == 0:
+                    port = i
+                    mapport = i+10000
+            VmPort.objects.create(vmname=form['name'], port=port, mapport=mapport)
+
         else:
             pass
         return HttpResponse(json.dumps(ret))
@@ -360,6 +371,7 @@ def vm_delete(request):
             print form
             for elem in form:
                 Vm.objects.filter(name=elem).delete()
+                VmPort.objects.fileter(vmname=elem).delete()
             return HttpResponse(json.dumps(ret))
     except:
         pass
@@ -393,8 +405,9 @@ def vm_start(request):
                 engine = Configure.objects.get(key='engine').value
                 print engine
                 iso = ""
-                port = 3000
-                vmop.vmStart(engine, vminfo.name, vminfo.id, vminfo.cpu, vminfo.memory, vminfo.disk1path, port)
+                vmports = VmPort.objects.filter(vmname=elem)[0]
+                vmop.vmStart(engine, vminfo.name, vminfo.id, vminfo.cpu, vminfo.memory, vminfo.disk1path, vmports.port)
+                vmop.vmStartProxy(vmports.port, vmports.mapport)
         return HttpResponse(json.dumps(ret))
     except Exception,e:
         print e
@@ -417,14 +430,29 @@ def vm_stop(request):
     return HttpResponse(json.dumps(ret))
 
 def iso(request):
-    ret = {'status':0, 'msg':'vm snapshot success', 'data': {}}
+    ret = {'status':0, 'msg':'vm iso success', 'data': {}}
     data = []
-    print 'template request'
+    print 'iso request'
     try:
         if request.method == "GET":
             pass
         elif request.method == "POST":
             pass
+        else:
+            pass
+    except:
+        pass
+
+    return HttpResponse(json.dumps(ret))
+
+def connect_info(request):
+    ret = {'status': 0, 'msg': 'vm connection success', 'data': {}}
+    data = []
+    print 'connection request'
+    try:
+        if request.method == "GET":
+            name = request.GET['vmname']
+            vminfo = Vm.objects.filter(name=name)[0]
         else:
             pass
     except:
