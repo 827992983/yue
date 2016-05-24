@@ -12,6 +12,7 @@ from net import net
 from yuelibs import utils
 import vm.vm as vmop
 import os
+import shutil
 import vm.qemuimg as qemuimg
 # Create your views here.
 
@@ -255,13 +256,13 @@ def vm(request):
                 if len(vmports) == 0:
                     port = i
                     mapport = i+10000
+            print "port=%d,mapport=%d" % (port,mapport)
             VmPort.objects.create(vmname=form['name'], port=port, mapport=mapport)
-
         else:
             pass
         return HttpResponse(json.dumps(ret))
     except Exception,e:
-        print e
+        print 'vm operation error',e
 
     ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
@@ -370,8 +371,14 @@ def vm_delete(request):
             form = json.loads(request.body)
             print form
             for elem in form:
+                vminfo =  Vm.objects.filter(name=elem)[0]
+                print vminfo
+                path = vminfo.disk1path
+                path = path[:-11]
+                print path
+                shutil.rmtree(path)
                 Vm.objects.filter(name=elem).delete()
-                VmPort.objects.fileter(vmname=elem).delete()
+                VmPort.objects.filter(vmname=elem).delete()
             return HttpResponse(json.dumps(ret))
     except:
         pass

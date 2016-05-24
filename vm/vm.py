@@ -51,7 +51,14 @@ def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="",
     return 0
 
 def vmStartProxy(port, mapport):
-    
+    curr_path = os.getcwd()
+    print curr_path
+    websock_path = curr_path[:-3]
+    websock_path = os.path.join(websock_path, 'websockify.py')
+    print websock_path
+    cmd = "%s %s 0.0.0.0:%s" % (websock_path, str(port), str(mapport))
+    utils.createThread(utils.execShellCommand, cmd)
+    return 0
 
 def getAllVmStatus():
     ret = []

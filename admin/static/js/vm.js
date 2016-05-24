@@ -607,6 +607,35 @@ function createSnapshot() {
     })
 }
 
+function restoreSnapshot() {
+    var ret = getSelectedVm();
+    if (ret.length == 0) {
+        alert("请选择要恢复快照的VM！");
+        return;
+    }
+    if (ret.length != 1) {
+        alert("只能选择1个VM恢复快照！");
+        return;
+    }
+    $.ajax({
+        async: false,
+        url: "/vm/remplate",
+        method: "POST",
+        data: JSON.stringify(ret),
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 0) {
+                window.location.reload();
+            } else {
+                alert("恢复快照失败！");
+            }
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        }
+    })
+}
+
 function deleteSnapshot() {
     var ret = getSelectedVm();
     if (ret.length == 0) {
@@ -627,7 +656,7 @@ function deleteSnapshot() {
             if (result.status == 0) {
                 window.location.reload();
             } else {
-                alert("启动虚拟机失败！");
+                alert("删除快照失败！");
             }
         },
         beforeSend: function (xhr) {

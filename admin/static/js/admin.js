@@ -555,6 +555,10 @@ function getSelectedStorage() {
 function addStorage() {
     var data = new Object();
     data.path = document.getElementById("input_storage").value;
+    if (data.path.substring(0,1) != "/"){
+        alert("linux路径必须以\"/\"开始")
+        return
+    }
     var selected = document.getElementById("select_storage_type").selectedIndex;
     if (selected == 0) {
         data.type = "local";
@@ -788,6 +792,7 @@ function vm() {
     document.getElementById("connectvm").onclick = connectVm;
     document.getElementById("stopvm").onclick = stopVm;
     document.getElementById("createsnapshot").onclick = createSnapshot;
+    document.getElementById("restoresnapshot").onclick = restoreSnapshot;
     document.getElementById("deletesnapshot").onclick = deleteSnapshot;
     document.getElementById("createtemplate").onclick = createTemplate;
     document.getElementById("addiso").onclick = addIso;
