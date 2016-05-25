@@ -414,7 +414,7 @@ def vm_start(request):
                 iso = ""
                 vmports = VmPort.objects.filter(vmname=elem)[0]
                 vmop.vmStart(engine, vminfo.name, vminfo.id, vminfo.cpu, vminfo.memory, vminfo.disk1path, vmports.port)
-                vmop.vmStartProxy(vmports.port, vmports.mapport)
+                vmop.vmStartProxy(vmports.mapport, vmports.port)
         return HttpResponse(json.dumps(ret))
     except Exception,e:
         print e
