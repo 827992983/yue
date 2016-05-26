@@ -109,11 +109,12 @@ function getAllVms() {
         document.getElementById("vm_desc_cpu").innerHTML = vminfo.cpu;
         document.getElementById("vm_desc_memory").innerHTML = vminfo.memory;
         var nic = ""
-        if (vminfo.nic1 == "yes") {
-            nic = "nic1";
+        if (vminfo.nic1 != "") {
+            nic = vminfo.nic1;
         }
-        if (vminfo.nic2 == "yes") {
-            nic = nic + ",nic2"
+        if (vminfo.nic2 != "") {
+            nic = nic + ","
+            nic = nic + vminfo.nic2
         }
         document.getElementById("vm_desc_nic").innerHTML = nic;
         document.getElementById("vm_desc_disk1").innerHTML = vminfo.disk1;
