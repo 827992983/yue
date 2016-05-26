@@ -432,12 +432,16 @@ def vm_start(request):
 def vm_stop(request):
     ret = {'status':0, 'msg':'vm stop success', 'data': {}}
     data = []
-    print 'vm start request'
+    print 'vm stop request'
     try:
         if request.method == "POST":
             form = json.loads(request.body)
             for elem in form:
                 vminfo = Vm.objects.filter(name=elem)[0]
+                vmop.shutdown(vminfo.id)
+                mapport = VmPort.objects.filter(vmname=elem)[0].mapport
+                vmop.clearWebsock(mapport)
+                print "OK"
         return HttpResponse(json.dumps(ret))
     except:
         pass

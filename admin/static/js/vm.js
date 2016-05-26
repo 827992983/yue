@@ -565,6 +565,8 @@ function stopVm() {
         return;
     }
 
+    alert(JSON.stringify(ret))
+
     $.ajax({
         async: false,
         url: "/vm/stop",
@@ -575,7 +577,7 @@ function stopVm() {
             if (result.status == 0) {
                 window.location.reload();
             } else {
-                alert("启动虚拟机失败！");
+                alert("虚拟机关闭失败！");
             }
         },
         beforeSend: function (xhr) {

@@ -106,3 +106,32 @@ def getVmStatus(vmname):
     data['name'] = vmname
     data['status'] = 'stop'
     return data
+
+def shutdown(vmid):
+    cmd = "ps -aux|grep %s" % vmid
+    out, err, errcode = utils.execShellCommand(cmd)
+    if errcode == 0:
+        out = utils.mergeMultiSpace(out)
+        li1 = out.split("\n")
+        for i in li1:
+            li2 = i.split(' ')
+            for j in range(0, len(li2) - 1):
+                if li2[j] == '-name':
+                    utils.execShellCommand("kill -9 %s" % str(li2[1]))
+    return True
+
+def clearWebsock(mapport):
+    cmd = "ps -aux|grep websockify |grep %s" % str(mapport)
+    out, err, errcode = utils.execShellCommand(cmd)
+    if errcode == 0:
+        out = utils.mergeMultiSpace(out)
+        print out
+        li1 = out.split("\n")
+        for i in li1:
+            li2 = i.split(' ')
+            for j in range(0, len(li2) - 1):
+                if li2[j] == 'python':
+                    cmd = "kill -9 %s" % str(li2[1])
+                    utils.execShellCommand(cmd)
+    print 'finish'
+    return True
