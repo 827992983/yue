@@ -191,7 +191,7 @@ def vm(request):
                         vminfo['templatename'] = elem.templatename
                         vminfo['templatepath'] = elem.templatepath
                         vminfo['nic1'] = elem.nic1
-                        vminfo['nic2'] = elem.nic1
+                        vminfo['nic2'] = elem.nic2
                         vminfo['disk1'] = elem.disk1
                         vminfo['disk2'] = elem.disk2
                         vminfo['snapshotname'] = elem.snapshotname
@@ -212,7 +212,7 @@ def vm(request):
                 vminfo['templatename'] = elem.templatename
                 vminfo['templatepath'] = elem.templatepath
                 vminfo['nic1'] = elem.nic1
-                vminfo['nic2'] = elem.nic1
+                vminfo['nic2'] = elem.nic2
                 vminfo['disk1'] = elem.disk1
                 vminfo['disk2'] = elem.disk2
                 vminfo['snapshotname'] = elem.snapshotname
@@ -244,6 +244,10 @@ def vm(request):
                 disk2_path = os.path.join(disk_path, 'disk2.qcow2')
                 print disk2_path
                 qemuimg.create(disk1_path, 'qcow2')
+            if form['nic1'] == 'yes':
+                nic1_name = "tap1%s" % form['name']
+            if form['nic2'] == 'yes':
+                nic2_name = "tap2%s" % form['name']
             Vm.objects.create(id=vmid,name=form['name'],cpu=form['cpu'],memory=form['memory'],
                               user=form['user'],system=form['system'],
                               templatename=form['templatename'],templatepath=template_path,

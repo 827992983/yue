@@ -229,7 +229,7 @@ function createVm() {
         selected = document.getElementById("nic1");
         index = selected.selectedIndex;
         var nic1 = selected.options[index].value;
-        if (nic1 = "Yes") {
+        if (nic1 == "Yes") {
             data.nic1 = "yes";
         } else {
             data.nic1 = "no";
@@ -238,7 +238,7 @@ function createVm() {
         selected = document.getElementById("nic2");
         index = selected.selectedIndex;
         var nic2 = selected.options[index].value;
-        if (nic2 = "Yes") {
+        if (nic2 == "Yes") {
             data.nic2 = "yes";
         } else {
             data.nic2 = "no";
