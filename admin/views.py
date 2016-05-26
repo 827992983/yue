@@ -394,8 +394,12 @@ def vm_edit(request):
     try:
         if request.method == "POST":
             form = json.loads(request.body)
+            if form['nic1'] == 'yes':
+                nic1_name = "tap1%s" % form['name']
+            if form['nic2'] == 'yes':
+                nic2_name = "tap2%s" % form['name']
             Vm.objects.filter(name=form['name']).update(name=form['name'],cpu=form['cpu'],memory=form['memory'],
-                              user=form['user'],nic1=form['nic1'],nic2=form['nic2'],
+                              user=form['user'],nic1=nic1_name,nic2=nic2_name,
                               disk1=form['disk1'],disk2=form['disk2'])
             return HttpResponse(json.dumps(ret))
     except Exception,e:
@@ -458,12 +462,16 @@ def iso(request):
 
 def connect_info(request):
     ret = {'status': 0, 'msg': 'vm connection success', 'data': {}}
-    data = []
+    data = {}
     print 'connection request'
     try:
         if request.method == "GET":
             name = request.GET['vmname']
-            vminfo = Vm.objects.filter(name=name)[0]
+            vminfo = VmPort.objects.filter(vmname=name)[0]
+            data['mapport'] = vminfo.mapport
+            data['port'] = vminfo.port
+            ret['data'] = data
+            return HttpResponse(json.dumps(ret))
         else:
             pass
     except:

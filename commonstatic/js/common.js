@@ -22,6 +22,14 @@ function getCookie(c_name) {
     return ""
 }
 
+function getUrlPara(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return unescape(r[2]);
+    return null;
+}
+
 function emailCheck(email) {
     var pattern = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
     if (!pattern.test(email)) {

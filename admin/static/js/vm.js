@@ -516,8 +516,9 @@ function startVm() {
 }
 
 function getVmConnInfo(vmname){
+    var ret = new Object();
     $.ajax({
-        url: "/conninfo?vmname=" + vmname,
+        url: "/vm/conninfo?vmname=" + vmname,
         method: "GET",
         async: false,
         dataType: "json",
@@ -525,11 +526,15 @@ function getVmConnInfo(vmname){
             request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         },
         success: function (result) {
-            if (result.data.length == 1) {
-                ret = result.data[0];
+            if (result.status == 0) {
+                //alert(JSON.stringify(result))
+                ret = result.data
+            }else{
+                alert("获取虚拟机连接信息失败!")
             }
         }
     });
+    return ret;
 }
 
 function connectVm() {
@@ -544,13 +549,13 @@ function connectVm() {
     }
 
     var vmname = getSelectedVmName().name;
-    alert(vmname);
     var vmConnInfo = getVmConnInfo(vmname);
-    var hostname = vmConnInfo.hostname;
-    var port = vmConnInfo.port;
+    //alert(JSON.stringify(vmConnInfo))
+    var hostname = document.location.hostname;
+    var port = vmConnInfo.mapport;
 
-    var para = "?hostname=" + hostname + "&port=" + port;
-    window.open("spice-html5/spice.html" + para);
+    var para = "?host=" + hostname + "&port=" + port;
+    window.open("static/spice-html5/spice.html" + para);
 }
 
 function stopVm() {
