@@ -107,6 +107,43 @@ def getVmStatus(vmname):
     data['status'] = 'stop'
     return data
 
+def getVmStatusById(vmid):
+    data = {}
+    print "getVmStatusById"
+    cmd = "ps -aux|grep enable-kvm|grep %s" % (vmid,)
+    print cmd
+    out,err,errcode = utils.execShellCommand(cmd)
+    print "errcode = %d" % errcode
+    print "err= %s " % err
+    print "out=%s" % out
+    if errcode == 0:
+        print 1
+        out = utils.mergeMultiSpace(out)
+        print 2
+        li1 = out.split("\n")
+        print 3
+        for i in li1:
+            print i
+            li2 = i.split(' ')
+            if len(li2) < 2:
+                break
+            print li2
+            for j in range(0, len(li2)-1):
+                if li2[j] == '-name':
+                    data['pid'] = li2[1]
+                    data['cpu'] = li2[2]
+                    data['memory'] = li2[3]
+                    data['name'] = li2[j+1]
+                    data['status'] = "running"
+                    return data
+
+    data['pid'] = "0"
+    data['cpu'] = "0"
+    data['memory'] = "0"
+    data['name'] = vmid
+    data['status'] = 'stop'
+    return data
+
 def shutdown(vmid):
     cmd = "ps -aux|grep %s" % vmid
     out, err, errcode = utils.execShellCommand(cmd)

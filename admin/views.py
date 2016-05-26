@@ -376,10 +376,14 @@ def vm_delete(request):
             print form
             for elem in form:
                 vminfo =  Vm.objects.filter(name=elem)[0]
-                print vminfo
+                vmstat = vmop.getVmStatusById(vminfo.id)
+                print "vmstat=" % vmstat
+                if vmstat['status'] == 'running':
+                    ret = {'status': 4201, 'msg': 'vm is running, can not delete', 'data': {}}
+                    return HttpResponse(json.dumps(ret))
                 path = vminfo.disk1path
                 path = path[:-11]
-                print path
+                print "path=",path
                 shutil.rmtree(path)
                 Vm.objects.filter(name=elem).delete()
                 VmPort.objects.filter(vmname=elem).delete()

@@ -432,6 +432,7 @@ function editVm() {
                     dataType: "json",
                     success: function (result) {
                         if (result.status == 0) {
+                            alert("编辑成功，下次启动生效！")
                             $('.theme-popover-mask').fadeOut(100);
                             $('.theme-popover').slideUp(200);
                             window.location.reload();//刷新页面的方法
@@ -478,6 +479,9 @@ function deleteVm() {
         dataType: "json",
         success: function (result) {
             if (result.status == 0) {
+                window.location.reload();
+            } else if(result.status == 4201){
+                alert("虚拟机正在运行，无法删除！")
                 window.location.reload();
             } else {
                 alert("删除虚拟机失败！");
@@ -564,8 +568,6 @@ function stopVm() {
         alert("请选择要关机的VM！");
         return;
     }
-
-    alert(JSON.stringify(ret))
 
     $.ajax({
         async: false,
