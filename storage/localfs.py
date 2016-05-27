@@ -106,3 +106,15 @@ class LocalFsStorage(object):
             if self._isMount(path):
                 return path
         return '/'
+
+def getIso(isopath):
+    iso = []
+    ret = []
+
+    for parent, dirnames, filenames in os.walk(isopath):
+        iso += filenames
+
+    for file in iso:
+        if file.endswith(".iso") or file.endswith(".ISO"):
+            ret.append(file)
+    return ret

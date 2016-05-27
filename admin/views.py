@@ -6,6 +6,7 @@ from .models import Configure
 from .models import Storage
 from .models import Vm
 from .models import VmPort
+from .models import VmIso
 from config import sysconfig
 from storage import localfs
 from net import net
@@ -112,14 +113,17 @@ def storage(request):
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
             st = Storage.objects.filter(type='local')
-            if  st is not None and len(st) > 0:
+            if  st is not None and len(st) and form['type']=='local'> 0:
                 ret = {'status':3003, 'msg':'one of storage type only have one', 'data': {}}
                 return HttpResponse(json.dumps(ret))
             st = Storage.objects.filter(type='iso')
-            if st is not None and len(st) > 0:
+            if st is not None and len(st) and form['type']=='iso'> 0:
                 ret = {'status': 3003, 'msg': 'one of storage type only have one', 'data': {}}
                 return HttpResponse(json.dumps(ret))
             st = localfs.LocalFsStorage(form['path'], True)
+            if form['type'] == "iso":
+                os.rmdir(os.path.join(form['path'], "image"))
+                os.rmdir(os.path.join(form['path'], "template"))
             Storage.objects.create(path=form['path'], type=form['type'])
             return HttpResponse(json.dumps(ret))
         elif request.method=="DELETE":
@@ -462,14 +466,21 @@ def iso(request):
     print 'iso request'
     try:
         if request.method == "GET":
-            pass
+            isopath = Storage.objects.filter(type="iso")[0].path
+            data = localfs.getIso(isopath)
+            ret['data'] = data
+            return HttpResponse(json.dumps(ret))
         elif request.method == "POST":
-            pass
+            form = json.loads(request.body)
+            VmIso.objects.filter(vmname=form['vmname']).delete()
+            isopath = Storage.objects.filter(type="iso")[0].path
+            VmIso.objects.create(vmname=form['vmname'], iso=form['iso'], path=os.path.join(isopath, form['iso']))
+            return HttpResponse(json.dumps(ret))
         else:
             pass
     except:
         pass
-
+    ret = {'status': 45002, 'msg': 'vm iso success', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
 def connect_info(request):
@@ -488,5 +499,5 @@ def connect_info(request):
             pass
     except:
         pass
-
+    ret = {'status': 46002, 'msg': 'vm connection error', 'data': {}}
     return HttpResponse(json.dumps(ret))

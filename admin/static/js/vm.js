@@ -712,6 +712,8 @@ function addIso() {
         return;
     }
 
+    var vmname = ret[0]
+
     $.ajax({
         url: "static/html/addiso.html",
         method: "GET",
@@ -753,12 +755,16 @@ function addIso() {
     });
 
     document.getElementById("btn_add_iso").onclick = function () { //javascript方式
-        alert("ISO")
+        data = new Object();
+        data.vmname = vmname;
+        selected = document.getElementById("iso")
+        var index = selected.selectedIndex;
+        data.iso = selected.options[index].value;
         $.ajax({
             async: false,
             url: "/iso",
             method: "post",
-            data: JSON.stringify(ret),
+            data: JSON.stringify(data),
             dataType: "json",
             success: function (result) {
                 if (result.status == 0) {

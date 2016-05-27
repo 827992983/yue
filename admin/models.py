@@ -47,3 +47,11 @@ class VmPort(models.Model):
 
     def __unicode__(self):
         return self.vmname
+
+class VmIso(models.Model):
+    vmname = models.CharField(max_length=64, primary_key=True)
+    iso = models.CharField(max_length=256, default='')
+    path = models.CharField(max_length=256, default='')
+
+    def __unicode__(self):
+        return self.vmname
