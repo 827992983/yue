@@ -111,9 +111,13 @@ def storage(request):
             if  st is not None and len(st) > 0:
                 ret = {'status':3002, 'msg':'storage has exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
-            st = Storage.objects.filter(type='data')
+            st = Storage.objects.filter(type='local')
             if  st is not None and len(st) > 0:
-                ret = {'status':3003, 'msg':'data storage only have one', 'data': {}}
+                ret = {'status':3003, 'msg':'one of storage type only have one', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            st = Storage.objects.filter(type='iso')
+            if st is not None and len(st) > 0:
+                ret = {'status': 3003, 'msg': 'one of storage type only have one', 'data': {}}
                 return HttpResponse(json.dumps(ret))
             st = localfs.LocalFsStorage(form['path'], True)
             Storage.objects.create(path=form['path'], type=form['type'])

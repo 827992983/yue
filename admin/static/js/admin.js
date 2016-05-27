@@ -565,7 +565,7 @@ function addStorage() {
     } else if (selected == 1) {
         data.type = "iso";
     }
-    alert(JSON.stringify(data))
+    //alert(JSON.stringify(data))
     $.ajax({
         url: "/storage",
         method: "POST",
@@ -577,6 +577,10 @@ function addStorage() {
         success: function (result) {
             if (result.status == 0) {
                 window.location.reload();
+            } else if(result.status == 3003) {
+                alert("一个类型的存储，只能有一个！")
+            } else if (result.status = 3002){
+                alert("存储域已经存在！")
             } else {
                 alert("添加存储失败！");
             }
@@ -713,7 +717,7 @@ function networkMgmt() {
             if (result.status == 0) {
                 //alert(JSON.stringify(result));
                 var all = result.data;
-                alert(JSON.stringify(all))
+                //alert(JSON.stringify(all))
                 for (i in all) {
                     var dev = all[i].dev;
                     if (dev != null) {
