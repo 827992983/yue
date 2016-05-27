@@ -711,21 +711,65 @@ function addIso() {
         alert("只能选择1个VM挂载光盘！");
         return;
     }
+
+    $.ajax({
+        url: "static/html/addiso.html",
+        method: "GET",
+        async: false,
+        dataType: "text",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            var node = document.getElementById("mainsession");
+            var div = document.createElement("div");
+            div.innerHTML = result;
+            node.appendChild(div);
+            $('.theme-popover-mask').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+        }
+    });
+
     $.ajax({
         async: false,
         url: "/iso",
-        method: "post",
-        data: JSON.stringify(ret),
         dataType: "json",
         success: function (result) {
             if (result.status == 0) {
-                window.location.reload();
+                var data = result.data;
+                var i = 0;
+                for (i = 0; i < data.length; i++) {
+                    var select_iso = document.getElementById("iso");
+                    select_iso.add(new Option(data[i]))
+                }
             } else {
-                alert("挂载光盘失败！");
+                alert("获取光盘信息失败！")
             }
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
         }
-    })
+    });
+
+    document.getElementById("btn_add_iso").onclick = function () { //javascript方式
+        alert("ISO")
+        $.ajax({
+            async: false,
+            url: "/iso",
+            method: "post",
+            data: JSON.stringify(ret),
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 0) {
+                    alert("挂载光盘成功，仅下次启动生效！");
+                } else {
+                    alert("挂载光盘失败！");
+                }
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+            }
+        })
+    }
 }

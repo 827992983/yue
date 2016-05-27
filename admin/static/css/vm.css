@@ -262,3 +262,15 @@ table {
     margin-top: 20px;
     margin-left: 45%;
 }
+
+#btn_add_iso{
+  margin-left: 50px
+}
+
+#li_iso{
+  margin-top: 50px
+}
+
+#iso{
+  width: 300px
+}
