@@ -13,6 +13,7 @@ import sys
 import socket
 import logging
 import threading
+import random
 
 def createThread(callback, *args):
     th = threading.Thread(target=callback, args=args)
@@ -70,6 +71,13 @@ def mergeMultiSpace(s):
         if s == s1:
             return s
         s = s1
+
+def randomMAC():
+    mac = [ 0x52, 0x54, 0x00,
+        random.randint(0x00, 0x7f),
+        random.randint(0x00, 0xff),
+        random.randint(0x00, 0xff) ]
+    return ':'.join(map(lambda x: "%02x" % x, mac))
 
 def checkPort(ip, port):
     """

@@ -769,6 +769,8 @@ function addIso() {
             success: function (result) {
                 if (result.status == 0) {
                     alert("挂载光盘成功，仅下次启动生效！");
+                     $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
                 } else {
                     alert("挂载光盘失败！");
                 }

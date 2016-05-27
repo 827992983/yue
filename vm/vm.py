@@ -10,7 +10,7 @@ import yuelibs.utils as utils
 #/usr/libexec/qemu-kvm -name CTVM -cpu Westmere,+vmx -enable-kvm -m 2048 -smp 2 -spice port=5930,disable-ticketing -vga qxl
 # -net nic,vlan=0,macaddr=2c:07:00:00:00:02,model=rtl8139 -net tap,vlan=0,ifname=tap102
 # -drive file=/share/david/ctvm.qcow2,index=0,media=disk
-def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="", nic1="", nic2="", iso=""):
+def vmStart(engine, name, vmid, cpu, memory, port, disk1, disk2="", nic1="", nic2="",iso="", template=""):
     diskIndex = 0
 
     print "vmStart"
@@ -23,23 +23,26 @@ def vmStart(engine, name, vmid, cpu, memory, disk1, port, disk2="", template="",
         cmd = engine
 
     cmd = cmd + " -name %s -enable-kvm -smp %s -m %s " % (name, cpu, memory)
-
     if iso is not None and len(iso) > 0:
         iso = "-drive file=%s,index=%s,media=cdrom " % (iso, str(diskIndex))
+        cmd = cmd + iso
         diskIndex += 1
-    if disk1:
+
+    if disk1 and len(disk1)>0:
         disk1 = " -drive file=%s,index=%s,media=disk " % (disk1, str(diskIndex))
         cmd = cmd + disk1
         diskIndex += 1
-    if disk2:
+    if disk2 and len(disk2)>0:
         disk2 = " -drive file=%s,index=%s,media=disk " % (disk2, str(diskIndex))
         cmd = cmd + disk2
         diskIndex += 1
 
-    if nic1:
-        nic1 = "-net nic,macaddr=%s,model=rtl8139 -net tap,ifname=%s " % (nic1['mac'], nic1['name'])
-    if nic2:
-        nic1 = "-net nic,macaddr=%s,model=rtl8139 -net tap,ifname=%s " % (nic2['mac'], nic2['name'])
+    if nic1 and len(nic1)>1:
+        nic = "-net nic,macaddr=%s,model=rtl8139 -net tap,ifname=%s " % (nic1['mac'], nic1['name'])
+        cmd = cmd + nic
+    if nic2 and len(nic2)>1:
+        nic = "-net nic,macaddr=%s,model=rtl8139 -net tap,ifname=%s " % (nic2['mac'], nic2['name'])
+        cmd = cmd + nic
 
     if port >= 3000:
         cmd = cmd + " -spice port=%s,disable-ticketing " % (str(port))

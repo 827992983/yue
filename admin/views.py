@@ -430,11 +430,24 @@ def vm_start(request):
             for elem in form:
                 vminfo = Vm.objects.filter(name=elem)[0]
                 engine = Configure.objects.get(key='engine').value
-                print engine
-                iso = ""
+                isoinfo = VmIso.objects.filter(vmname=elem)
+                isopath = ""
+                if isoinfo != None and len(isoinfo) == 1:
+                    isopath = isoinfo[0].path
                 vmports = VmPort.objects.filter(vmname=elem)[0]
-                vmop.vmStart(engine, vminfo.name, vminfo.id, vminfo.cpu, vminfo.memory, vminfo.disk1path, vmports.port)
+                nic1 = {}
+                nic2 = {}
+                if len(vminfo.nic1) > 3:
+                    nic1['name'] = vminfo.nic1
+                    nic1['mac'] = utils.randomMAC()
+                if len(vminfo.nic2) > 3:
+                    nic2['name'] = vminfo.nic2
+                    nic2['mac'] = utils.randomMAC()
+                vmop.vmStart(engine=engine, name=vminfo.name, vmid=vminfo.id, cpu=vminfo.cpu, memory=vminfo.memory,
+                             port=vmports.port, disk1=vminfo.disk1path, disk2=vminfo.disk2path, nic1=nic1,
+                             nic2=nic2, iso=isopath)
                 vmop.vmStartProxy(vmports.mapport, vmports.port)
+                VmIso.objects.filter(vmname=elem).delete()
         return HttpResponse(json.dumps(ret))
     except Exception,e:
         print e
