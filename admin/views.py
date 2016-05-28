@@ -286,50 +286,16 @@ def template(request):
     try:
         if request.method == "GET":
             vms = Vm.objects.filter(istemplate='yes')
+            templates = []
             if vms is None or len(vms)<1:
                 pass
             else:
                 for elem in vms:
-                    vminfo = {}
-                    vminfo['vmid'] = elem.id
-                    vminfo['name'] = elem.name
-                    vminfo['system'] = elem.system
-                    vminfo['cpu'] = elem.cpu
-                    vminfo['memory'] = elem.memory
-                    vminfo['user'] = elem.user
-                    vminfo['istemplate'] = elem.istemplate
-                    vminfo['templatename'] = elem.templatename
-                    vminfo['templatepath'] = elem.templatepath
-                    vminfo['nic1'] = elem.nic1
-                    vminfo['nic2'] = elem.nic1
-                    vminfo['disk1'] = elem.disk1
-                    vminfo['disk2'] = elem.disk2
-                    vminfo['snapshotname'] = elem.snapshotname
-                    vminfo['snapshotpath'] = elem.snapshotpath
-                    vminfo['yourself'] = elem.yourself
-                    data.append(vminfo)
+                    templates.append(elem.name)
+            ret['data'] = templates
         elif request.method == "POST":
             form = json.loads(request.body)
-            id = utils.uuid()
-            Vm.objects.create(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
-                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
-                              templatename=form['templatename'],templatepath=form['templatepath'],
-                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
-                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
-                              yourself=form['yourself'])
-        elif request.method == "PUT":
-            form = json.loads(request.body)
-            id = form['vmid']
-            Vm.objects.filter(vmid=id).update(vmid=id,name=form['name'],cpu=form['cpu'],memory=form['memory'],
-                              user=form['user'],istemplate=form['istemplate'],system=form['system'],
-                              templatename=form['templatename'],templatepath=form['templatepath'],
-                              nic1=form['nic1'],nic2=form['nic2'],disk1=form['disk1'],disk2=['disk2'],
-                              snapshotname=form['snapshotname'],snapshotpath=form['snapshotpath'],
-                              yourself=form['yourself'])
-        elif request.method == "DELETE":
-            form = json.loads(request.body)
-            for id in form:
-                Vm.objects.filter(vmid=id).delete()
+            Vm.objects.filter(name=form[0]).update(istemplate='yes')
         else:
             pass
         return HttpResponse(json.dumps(ret))
@@ -406,6 +372,13 @@ def vm_edit(request):
     try:
         if request.method == "POST":
             form = json.loads(request.body)
+            print  form
+            vminfo = Vm.objects.filter(name=form['name'])[0]
+            if vminfo.istemplate == "yes":
+                ret = {'status': 4303, 'msg': 'template can not edit', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            nic1_name = ""
+            nic2_name = ""
             if form['nic1'] == 'yes':
                 nic1_name = "tap1%s" % form['name']
             if form['nic2'] == 'yes':
@@ -429,6 +402,9 @@ def vm_start(request):
             print form
             for elem in form:
                 vminfo = Vm.objects.filter(name=elem)[0]
+                if vminfo.istemplate == "yes":
+                    ret = {'status':4403, 'msg':'template can not start', 'data': {}}
+                    return HttpResponse(json.dumps(ret))
                 engine = Configure.objects.get(key='engine').value
                 isoinfo = VmIso.objects.filter(vmname=elem)
                 isopath = ""

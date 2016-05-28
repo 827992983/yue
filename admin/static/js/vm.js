@@ -390,7 +390,7 @@ function editVm() {
                 selected = document.getElementById("nic1");
                 index = selected.selectedIndex;
                 var nic1 = selected.options[index].value;
-                if (nic1 = "Yes") {
+                if (nic1 == "Yes") {
                     data.nic1 = "yes";
                 } else {
                     data.nic1 = "no";
@@ -399,7 +399,7 @@ function editVm() {
                 selected = document.getElementById("nic2");
                 index = selected.selectedIndex;
                 var nic2 = selected.options[index].value;
-                if (nic2 = "Yes") {
+                if (nic2 == "Yes") {
                     data.nic2 = "yes";
                 } else {
                     data.nic2 = "no";
@@ -436,6 +436,8 @@ function editVm() {
                             $('.theme-popover-mask').fadeOut(100);
                             $('.theme-popover').slideUp(200);
                             window.location.reload();//刷新页面的方法
+                        } else if(result.status == 4303) {
+                            alert("这是模板不能编辑!");
                         } else {
                             alert("编辑虚拟机失败！");
                         }
@@ -509,6 +511,8 @@ function startVm() {
         success: function (result) {
             if (result.status == 0) {
                 window.location.reload();
+            } else if(result.status == 4403) {
+                alert("这是模板,不能启动!");
             } else {
                 alert("启动虚拟机失败！");
             }
@@ -682,23 +686,30 @@ function createTemplate() {
         return;
     }
 
+    if (ret.length != 1) {
+        alert("只能选择1个VM创建模板！");
+        return;
+    }
+
     $.ajax({
-        async: false,
-        url: "/vm/stop",
-        method: "POST",
-        data: JSON.stringify(ret),
-        dataType: "json",
-        success: function (result) {
-            if (result.status == 0) {
-                window.location.reload();
-            } else {
-                alert("启动虚拟机失败！");
+            async: false,
+            url: "/vm/template",
+            method: "post",
+            data: JSON.stringify(ret),
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 0) {
+                    alert("创建模板成功！");
+                     $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+                } else {
+                    alert("创建模板失败！");
+                }
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
             }
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
-        }
-    })
+    });
 }
 
 function addIso() {
@@ -778,6 +789,6 @@ function addIso() {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
             }
-        })
+        });
     }
 }
