@@ -1,0 +1,17 @@
+#!/bin/sh
+bridge=vmbridge
+iface=$1
+openvpn=`which openvpn`
+brctl=`which brctl`
+ifconfig=`which ifconfig`
+user=`whoami`
+echo "Executing /etc/qemu-ifdown"
+echo "Bringing down iface: $1 and removing it from bridge: ${bridge}"
+# down the interface, remove it from the bridge, destroy virtual tunnel
+if [ $user == root ]; then
+    ${ifconfig} ${iface} down
+    ${brctl} delif ${bridge} ${iface}
+else
+    sudo ${ifconfig} ${iface} down
+    sudo ${brctl} delif ${bridge} ${iface}
+fi

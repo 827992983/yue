@@ -1,0 +1,21 @@
+#!/bin/sh
+#/sbin/ifconfig $1 192.168.2.65
+bridge=vmbridge
+iface=$1
+openvpn=`which openvpn`
+brctl=`which brctl`
+ifconfig=`which ifconfig`
+user=`whoami`
+echo "Executing /etc/qemu-ifup"
+echo "Bringing up iface: $1 and adding it to bridge: ${bridge}"
+# Create a virtual tunnel interface, add it to the bridge, bring it up
+if [ $user == root ]; then
+    #${openvpn} --mktun --dev ${iface}
+    ${brctl} addif ${bridge} ${iface}
+    ${ifconfig} ${iface} 0.0.0.0 promisc up
+else
+    #sudo ${openvpn} --mktun --dev ${iface}
+    sudo ${brctl} addif ${bridge} ${iface}
+    sudo ${ifconfig} ${iface} 0.0.0.0 promisc up
+fi    
+sleep 1
