@@ -170,7 +170,7 @@ function createVm() {
 
     $.ajax({
         async: false,
-        url: "/templates",
+        url: "/vm/template",
         dataType: "json",
         method: "GET",
         success: function (result) {
@@ -179,7 +179,7 @@ function createVm() {
                 var i = 0;
                 for (i = 0; i < data.length; i++) {
                     var select_owner = document.getElementById("select_template");
-                    select_owner.add(new Option(data[i].templatename))
+                    select_owner.add(new Option(data[i]))
                 }
             } else {
                 alert("获取虚拟机模板失败！")
@@ -699,9 +699,13 @@ function createTemplate() {
             dataType: "json",
             success: function (result) {
                 if (result.status == 0) {
-                    alert("创建模板成功！");
-                     $('.theme-popover-mask').fadeOut(100);
+                    alert("创建模板成功,！");
+                    $('.theme-popover-mask').fadeOut(100);
                 $('.theme-popover').slideUp(200);
+                } else if (result.status == 4003) {
+                    alert("有快照的虚拟机不可以创建模板！");
+                } else if (result.status == 4004) {
+                    alert("已经基于模板创建的虚拟机，不可以创建模板！");
                 } else {
                     alert("创建模板失败！");
                 }

@@ -293,12 +293,35 @@ def template(request):
                 for elem in vms:
                     templates.append(elem.name)
             ret['data'] = templates
+            print ret
+            return HttpResponse(json.dumps(ret))
         elif request.method == "POST":
             form = json.loads(request.body)
-            Vm.objects.filter(name=form[0]).update(istemplate='yes')
+            vmname = form[0]
+            vminfo = Vm.objects.filter(name=vmname)[0]
+            if len(vminfo.snapshotname) > 1:
+                ret = {'status': 4003, 'msg': 'can not create template with snapshot', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            if len(vminfo.templatename) > 1:
+                ret = {'status': 4004, 'msg': 'can not create template, because the vm have a template', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            disk1path = vminfo.disk1path
+            print "old disk1path:%s" % disk1path
+            storage_path = Storage.objects.filter(type='local')[0].path
+            template_path = os.path.join(storage_path, 'template')
+            template_path = os.path.join(template_path, vminfo.id)
+            image_path = os.path.join(storage_path, 'image')
+            image_path = os.path.join(image_path, vminfo.id)
+            print template_path
+            os.mkdir(template_path)
+            template_path = os.path.join(template_path, "disk1.qcow2")
+            shutil.move(disk1path, template_path)
+            shutil.rmtree(image_path)
+            print "new disk1path:%s" % template_path
+            Vm.objects.filter(name=vmname).update(istemplate='yes', disk1path=template_path, disk2path="", snapshotname="", snapshotpath="")
+            return HttpResponse(json.dumps(ret))
         else:
             pass
-        return HttpResponse(json.dumps(ret))
     except Exception,e:
         print e
 
@@ -349,6 +372,10 @@ def vm_delete(request):
             form = json.loads(request.body)
             print form
             for elem in form:
+                templates = Vm.objects.filter(templatename=elem)
+                if templates is not None and len(templates) > 0:
+                    ret = {'status': 4203, 'msg': 'vm is a template of vms', 'data': {}}
+                    return HttpResponse(json.dumps(ret))
                 vminfo =  Vm.objects.filter(name=elem)[0]
                 vmstat = vmop.getVmStatusById(vminfo.id)
                 print "vmstat=" % vmstat
