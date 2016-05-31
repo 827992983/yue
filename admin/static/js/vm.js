@@ -164,6 +164,7 @@ function createVm() {
             $('.theme-poptit .close').click(function () {
                 $('.theme-popover-mask').fadeOut(100);
                 $('.theme-popover').slideUp(200);
+                window.location.reload();
             })
         }
     });
@@ -205,6 +206,53 @@ function createVm() {
         }
     });
 
+    document.getElementById("select_template").onchange = function (){
+        var selected = document.getElementById("select_template")
+        var index = selected.selectedIndex;
+        if (index > 0) {
+            var templatename = selected.options[index].value;
+            var vminfo = getVmInfo(templatename);
+            document.getElementById("system_type").options[vminfo.system].selected = true;
+            document.getElementById("memory").value = vminfo.memory;
+            if (vminfo.cpu == 2){
+                document.getElementById("cpu").options[1].selected = true;
+            }else if(vminfo.cpu == 4){
+                document.getElementById("cpu").options[2].selected = true;
+            }else if (vminfo.cpu == 8){
+                document.getElementById("cpu").options[3].selected = true;
+            }else{
+                document.getElementById("cpu").options[0].selected = true;
+            }
+
+            if (vminfo.disk1 > 0) {
+                document.getElementById("disk1").value = vminfo.disk1;
+            }else{
+                document.getElementById("disk1").value = "";
+            }
+/*
+            if (vminfo.disk2 > 0) {
+                document.getElementById("disk2").value = vminfo.disk2;
+            }else{
+                document.getElementById("disk2").value = "";
+            }
+*/
+            document.getElementById("disk1").setAttribute("disabled", "disabled");
+            document.getElementById("disk2").setAttribute("disabled", "disabled");
+
+            if (vminfo.nic1.length > 1){
+                document.getElementById("nic1").options[0].selected = true;
+            }else{
+                document.getElementById("nic1").options[1].selected = true;
+            }
+
+            if (vminfo.nic2.length > 1){
+                document.getElementById("nic2").options[1].selected = true;
+            }else{
+                document.getElementById("nic2").options[0].selected = true;
+            }
+        }
+    }
+
     //$("#btn_create_vm").click(function () {} //jquery 方式
     document.getElementById("btn_create_vm").onclick = function () { //javascript方式
         var data = new Object();
@@ -214,6 +262,7 @@ function createVm() {
         var index = selected.selectedIndex;
         if (index >= 1) {
             data.templatename = selected.options[index].value;
+
         } else {
             data.templatename = "";
         }
@@ -485,7 +534,10 @@ function deleteVm() {
             } else if(result.status == 4201){
                 alert("虚拟机正在运行，无法删除！")
                 window.location.reload();
-            } else {
+            } else if(result.status == 4203){
+                alert("请先删除基于该模板建立的虚拟机，然后再删除该模板！")
+                window.location.reload();
+            }else {
                 alert("删除虚拟机失败！");
             }
         },

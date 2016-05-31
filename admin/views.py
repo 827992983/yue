@@ -230,6 +230,7 @@ def vm(request):
             ret['data'] = data
         elif request.method == "POST":
             form = json.loads(request.body)
+            print form
             vmid = utils.uuid()
             template_path = ""
             disk1_path = ""
@@ -240,6 +241,9 @@ def vm(request):
             if rs != None and len(rs) > 0:
                 ret = {'status':4003, 'msg':'vm have exist', 'data': {}}
                 return HttpResponse(json.dumps(ret))
+            template_info = {}
+            if len(form['templatename']) > 1:
+                template_info = Vm.objects.filter(name=form['templatename'])[0]
             storage_path = Storage.objects.filter(type='local')[0].path
             image_path = os.path.join(storage_path, 'image')
             disk_path = os.path.join(image_path, vmid)
@@ -247,11 +251,14 @@ def vm(request):
             os.mkdir(disk_path)
             disk1_path = os.path.join(disk_path, 'disk1.qcow2')
             print "disk1_path=%s" % (disk1_path)
-            qemuimg.create(disk1_path, form['disk1'], 'qcow2')
+            if len(form['templatename']) > 1:
+                qemuimg.create(disk1_path, format='qcow2', backing=template_info.disk1path)
+            else:
+                qemuimg.create(disk1_path, form['disk1'], 'qcow2')
             if form['disk2'] != None and form['disk2'] > 0:
                 disk2_path = os.path.join(disk_path, 'disk2.qcow2')
                 print disk2_path
-                qemuimg.create(disk1_path, 'qcow2')
+                qemuimg.create(disk2_path, form['disk2'], 'qcow2')
             if form['nic1'] == 'yes':
                 nic1_name = "tap1%s" % form['name']
             if form['nic2'] == 'yes':
