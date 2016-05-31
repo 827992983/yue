@@ -535,6 +535,7 @@ function checkEnv() {
         setInterval(getEnv, 3000);
         gRefreshEnv = false;
     }
+
 }
 
 function getSelectedStorage() {
