@@ -119,7 +119,7 @@ function getAllVms() {
         document.getElementById("vm_desc_nic").innerHTML = nic;
         document.getElementById("vm_desc_disk1").innerHTML = vminfo.disk1;
         document.getElementById("vm_desc_disk2").innerHTML = vminfo.disk2;
-        document.getElementById("vm_desc_snapshort").innerHTML = vminfo.snapshotpath;
+        document.getElementById("vm_desc_snapshort").innerHTML = vminfo.snapshotname;
     }, function () {
 
     });
@@ -212,7 +212,7 @@ function createVm() {
 
         var selected = document.getElementById("select_template")
         var index = selected.selectedIndex;
-        if (index >= 0) {
+        if (index >= 1) {
             data.templatename = selected.options[index].value;
         } else {
             data.templatename = "";
@@ -602,17 +602,24 @@ function createSnapshot() {
         alert("只能选择1个VM创建快照！");
         return;
     }
+    var data=new Object();
+    data.vmname = ret[0]
     $.ajax({
         async: false,
-        url: "/vm/remplate",
+        url: "/vm/snapshot",
         method: "POST",
-        data: JSON.stringify(ret),
+        data: JSON.stringify(data),
         dataType: "json",
         success: function (result) {
             if (result.status == 0) {
+                alert("创建快照成功!")
                 window.location.reload();
+            } else if(result.status == 4701) {
+                alert("虚拟机正在运行，无法创建快照！");
+            } else if(result.status == 4702) {
+                alert("快照已经存在，请先删除旧的快照，然后创建新快照！");
             } else {
-                alert("启动虚拟机失败！");
+                alert("创建快照失败！");
             }
         },
         beforeSend: function (xhr) {
@@ -631,15 +638,20 @@ function restoreSnapshot() {
         alert("只能选择1个VM恢复快照！");
         return;
     }
+    var data = new Object()
+    data.vmname = ret[0]
     $.ajax({
         async: false,
-        url: "/vm/remplate",
-        method: "POST",
-        data: JSON.stringify(ret),
+        url: "/vm/snapshot",
+        method: "PUT",
+        data: JSON.stringify(data),
         dataType: "json",
         success: function (result) {
             if (result.status == 0) {
+                alert("恢复快照成功!")
                 window.location.reload();
+            } else if(result.status == 4701) {
+                alert("虚拟机正在运行，无法恢复快照！");
             } else {
                 alert("恢复快照失败！");
             }
@@ -660,16 +672,21 @@ function deleteSnapshot() {
         alert("只能选择1个VM删除快照！");
         return;
     }
+    var data = new Object()
+    data.vmname = ret[0]
     $.ajax({
         async: false,
         url: "/vm/snapshot",
         method: "DELETE",
-        data: JSON.stringify(ret),
+        data: JSON.stringify(data),
         dataType: "json",
         success: function (result) {
             if (result.status == 0) {
+                alert("删除快照成功!")
                 window.location.reload();
-            } else {
+            } else if(result.status == 4701) {
+                alert("虚拟机正在运行，无法删除快照！");
+            }  else {
                 alert("删除快照失败！");
             }
         },

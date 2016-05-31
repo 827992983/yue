@@ -333,15 +333,60 @@ def snapshot(request):
     data = []
     print 'template request'
     try:
-        if request.method == "GET":
-            pass
-        elif request.method == "POST":
-            pass
+        if request.method == "POST":
+            #create snapshot, need to create a new snapshot, or merge -> delete -> create
+            form = json.loads(request.body)
+            vmname = form['vmname']
+            vminfo = Vm.objects.filter(name=vmname)[0]
+            vmstat = vmop.getVmStatusById(vminfo.id)
+            print "vmstat=" % vmstat
+            if vmstat['status'] == 'running':
+                ret = {'status': 4701, 'msg': 'vm is running, can not create snapshot', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            if len(vminfo.snapshotname) > 1:
+                ret = {'status': 4702, 'msg': 'vm snapshot have exists', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            #if len(vminfo.snapshotname) > 1 and form['force']=='yes':
+            #    qemuimg.merge(vminfo.snapshotpath, vminfo.disk1path)
+            #    os.remove(vminfo.snapshotpath)
+            snapshotpath = vminfo.disk1path.replace("disk1.qcow2", "snapshot.qcow2")
+            print snapshotpath
+            qemuimg.create(snapshotpath, format="qcow2", backing=vminfo.disk1path)
+            Vm.objects.filter(name=vmname).update(snapshotname="yes",snapshotpath=snapshotpath)
+            return HttpResponse(json.dumps(ret))
+        elif request.method == "DELETE":
+            #delete snapshot, need to merge snapshot and remove snapshot file
+            form = json.loads(request.body)
+            print form
+            vmname = form['vmname']
+            vminfo = Vm.objects.filter(name=vmname)[0]
+            vmstat = vmop.getVmStatusById(vminfo.id)
+            print "vmstat=" % vmstat
+            if vmstat['status'] == 'running':
+                ret = {'status': 4701, 'msg': 'vm is running, can not create snapshot', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            qemuimg.merge(vminfo.snapshotpath, vminfo.disk1path)
+            os.remove(vminfo.snapshotpath)
+            Vm.objects.filter(name=vmname).update(snapshotname="", snapshotpath="")
+            return HttpResponse(json.dumps(ret))
+        elif request.method == "PUT":
+            # restore snapshot, need to delete snapshot file
+            form = json.loads(request.body)
+            vmname = form['vmname']
+            vminfo = Vm.objects.filter(name=vmname)[0]
+            vmstat = vmop.getVmStatusById(vminfo.id)
+            print "vmstat=" % vmstat
+            if vmstat['status'] == 'running':
+                ret = {'status': 4701, 'msg': 'vm is running, can not create snapshot', 'data': {}}
+                return HttpResponse(json.dumps(ret))
+            os.remove(vminfo.snapshotpath)
+            Vm.objects.filter(name=vmname).update(snapshotname="", snapshotpath="")
+            return HttpResponse(json.dumps(ret))
         else:
             pass
     except:
         pass
-
+    ret = {'status': 4703, 'msg': 'vm snapshot error', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
 

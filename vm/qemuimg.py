@@ -34,8 +34,9 @@ def create(image, size=None, format=None, backing=None):
         if not os.path.exists(backing):
             return -1
         cmd = cmd + "-o backing_file=%s " % (backing,)
-
-    cmd = cmd + " %s %sG" % (image, str(size))
+        cmd = cmd + " %s " % (image)
+    else:
+        cmd = cmd + " %s %sG" % (image, str(size))
 
     print cmd
 
@@ -43,6 +44,16 @@ def create(image, size=None, format=None, backing=None):
 
     if rc != 0:
         return -2
+
+    return 0
+
+def merge(srcimg, destimg):
+    cmd = "qemu convert -O qcow2 %s %s " % (srcimg, destimg)
+    print cmd
+    out, err, rc = utils.execShellCommand(cmd)
+
+    if rc != 0:
+        return -1
 
     return 0
 
