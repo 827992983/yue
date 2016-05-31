@@ -513,6 +513,8 @@ function startVm() {
                 window.location.reload();
             } else if(result.status == 4403) {
                 alert("这是模板,不能启动!");
+            } else if(result.status == 4404) {
+                alert("虚拟机已经启动!");
             } else {
                 alert("启动虚拟机失败！");
             }

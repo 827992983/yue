@@ -477,6 +477,11 @@ def vm_start(request):
                 if vminfo.istemplate == "yes":
                     ret = {'status':4403, 'msg':'template can not start', 'data': {}}
                     return HttpResponse(json.dumps(ret))
+                vmstat = vmop.getVmStatusById(vminfo.id)
+                print "vmstat=" % vmstat
+                if vmstat['status'] == 'running':
+                    ret = {'status': 4404, 'msg': 'vm is running', 'data': {}}
+                    return HttpResponse(json.dumps(ret))
                 engine = Configure.objects.get(key='engine').value
                 isoinfo = VmIso.objects.filter(vmname=elem)
                 isopath = ""
