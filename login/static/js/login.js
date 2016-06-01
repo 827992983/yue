@@ -32,7 +32,7 @@ function login() {
                     } else if (data.data.to == 'guest') {
                           window.location = 'guest';
                     } else {
-                        alert('登陆异常！');vm
+                        alert('登陆异常！');
                     }
                 } else if (data.status == 1001) {
                     //用户名或密码错误提示

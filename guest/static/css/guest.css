@@ -1,0 +1,364 @@
+/**
+ * Created by lijian on 16/6/1.
+ */
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    background: #fff url(/static/images/bg.jpg) repeat top left;
+    color: #1d3c41;
+    overflow-y: scroll;
+}
+
+.clear {
+    clear: both;
+}
+
+#adminheader {
+    border: 2px;
+    /*background-color : #FF0000;*/
+    border-style: solid;
+    height: 78px;
+    width: 100%;
+    font-family: serif;
+}
+
+#adminlogo {
+    /*background-color: #00FF00;*/
+    background-image: url(/static/images/logo.png);
+    border: 2px;
+    height: 78px;
+    width: 137px;
+    float: left;
+}
+
+#admintitle {
+    /*background-color: #0000FF;*/
+    border: 2px;
+    height: 60px;
+    width: 500px;
+    float: left;
+    font-family: Georgia;
+    font-weight: 400;
+    font-size: 45px;
+}
+
+#currentuser {
+    float: right;
+    width: 120px;
+    height: auto;
+    margin-right: 5px;
+}
+
+#logout {
+    float: right;
+    width: 50px;
+    auto: auto;
+}
+
+a {
+    text-decoration: none
+}
+
+#adminmain {
+    height: auto;
+    width: 100%;
+    /*overflow: hidden;*/
+}
+
+#adminfooter {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    color: #FFFFFF;
+    height: 50px;
+    border: 2px;
+    background-color: #1d3c41;
+    text-align: center;
+}
+
+/*This is Vm List*/
+
+#nav_vm {
+    background: #DFE1DB;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 25px;
+    overflow: hidden;
+}
+
+.ul_vm {
+    float: left;
+}
+
+.ul_vm a {
+    margin-top: 5px;
+    margin-left: 10px;
+    font-family: 'microsoft YaHei';
+    font-weight: 300;
+    font-size: 14px;
+    color: #1d3c41;
+}
+
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 100%;
+    font-size: 12px;
+}
+
+#table_vm {
+    border: solid #ccc 0px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc;
+    -moz-box-shadow: 0 1px 1px #ccc;
+    box-shadow: 0 1px 1px #ccc;
+}
+
+#table_vm thead {
+    background: #EEE;
+}
+
+#table_vm tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
+#table_vm td, #table_vm th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+#table_vm th {
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+}
+
+#table_vm td:first-child, #table_vm th:first-child {
+    border-left: none;
+}
+
+#table_vm th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+#table_vm th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+#table_vm th:only-child {
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+#table_vm tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+#table_vm tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+
+#vm_description {
+    font-size: 12px;
+    position: relative;
+}
+
+#vm_description li {
+    list-style: none;
+}
+
+.vm_desc_list {
+    margin: 1%;
+    float: left;
+    position: relative;
+    width: 200px;
+}
+
+#vm_desc_list1 {
+    width: 30%
+}
+
+#vm_desc_list2 {
+    width: 30%
+}
+
+#vm_desc_list3 {
+    width: 30%
+}
+
+#vm_description label {
+    width: 60px;
+    text-align: right;
+}
+
+#vm_description span {
+    width: 200px
+}
+
+.prompt {
+    font-size: 12px;
+    font-color: #FF0000;
+    border-top: 1px solid #ccc;
+}
+
+/* This is create vm*/
+.theme-popover-mask {
+    z-index: 9998;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.0;
+    filter: alpha(opacity=40);
+    display: none
+}
+
+.theme-popover {
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 660px;
+    height: 360px;
+    margin: -180px 0 0 -330px;
+    border-radius: 5px;
+    border: solid 2px #666;
+    background-color: #fff;
+    display: none;
+    box-shadow: 0 0 10px #666;
+    background: url(/static/images/bg.jpg) repeat top left;
+}
+
+.theme-poptit {
+    border-bottom: 1px solid #ddd;
+    padding: 12px;
+    position: relative;
+    background: #DFE1DB;
+}
+
+.theme-poptit .close {
+    float: right;
+    color: #999;
+    padding: 5px;
+    margin: -2px -5px -5px;
+    font: bold 14px/14px simsun;
+    text-shadow: 0 1px 0 #ddd
+}
+
+.theme-poptit .close:hover {
+    color: #444;
+}
+
+.div_createvm {
+    font-size: 12px;
+    position: relative;
+}
+
+.left_createvm {
+    width: 50%;
+    float: left;
+}
+
+.right_createvm {
+    width: 50%;
+    float: left;
+}
+
+#createvm_title {
+    color: #999;
+    font-weight: 100;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+#createvm_title h4 {
+    margin-left: 40%;
+}
+
+.div_createvm li {
+    list-style: none;
+    position: relative;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+.div_createvm label {
+    margin-left: 20px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    width: 100px;
+    text-align: right;
+    float: left;
+}
+
+.div_createvm select {
+    width: 120px;
+    float: left;
+}
+
+.vmpara {
+    width: 120px;
+    float: left;
+}
+
+#btn_create_vm {
+    margin-top: 20px;
+    margin-left: 45%;
+}
+
+#btn_edit_vm {
+    margin-top: 20px;
+    margin-left: 45%;
+}
+
+#btn_add_iso{
+  margin-left: 50px
+}
+
+#li_iso{
+  margin-top: 50px
+}
+
+#iso{
+  width: 300px
+}
+
+#btn_add_template{
+  margin-left: 50px
+}
+
+

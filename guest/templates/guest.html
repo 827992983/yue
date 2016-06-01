@@ -8,7 +8,10 @@
     <meta name="keywords" content="KVM,虚拟化"/>
     <meta name="author" content="lijian"/>
     <!-- <link rel="shortcut icon" href="../favicon.ico">-->
-
+    <link rel="stylesheet" type="text/css" href="static/css/guest.css"/>
+    <script type="text/javascript" src="static/js/guest.js"></script>
+    <script type="text/javascript" src="static/js/common.js"></script>
+    <script type="text/javascript" src="static/js/jquery.js"></script>
 </head>
 <body>
 <header id="adminheader">
@@ -18,11 +21,69 @@
         <span id="titlecontent"> 虚拟化应用管理平台 </span>
     </div>
     <a id="logout" href="#"><u>退出</u></a>
-    <span>当前用户:<span id="currentuser">unknown</span> </span>
+    <span id="currentuser">当前用户:<span id="username">unknown</span> </span>
 </header>
 <div class="clear"></div>
 <main id="adminmain">
-
+    <nav id="nav_vm">
+        <ul class="ul_vm"><a id="startvm" href="#vm">启动</a></ul>
+        <ul class="ul_vm"><a id="connectvm" href="#vm">连接</a></ul>
+        <ul class="ul_vm"><a id="stopvm" href="#vm">强制关闭</a></ul>
+    </nav>
+    <table id="table_vm">
+        <thead>
+        <tr class="th_vm">
+            <td class="td_vm_title">序号</td>
+            <td class="td_vm_title">名称</td>
+            <td class="td_vm_title">系统</td>
+            <td class="td_vm_title">状态</td>
+            <td class="td_vm_title">CPU</td>
+            <td class="td_vm_title">内存</td>
+        </tr>
+        </thead>
+    </table>
+    <div id="vm_description">
+        <div id="vm_desc_list1" class="vm_desc_list">
+            <ul>
+                <li>
+                    <label>所属用户：</label><span id="vm_desc_user" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>基于模板：</label><span id="vm_desc_template" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>是否模板：</label><span id="vm_desc_istemplate" class="vm_desc"></span>
+                </li>
+            </ul>
+        </div>
+        <div id="vm_desc_list2" class="vm_desc_list">
+            <ul>
+                <li>
+                    <label>CPU：</label><span id="vm_desc_cpu" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>内存：</label><span id="vm_desc_memory" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>网卡：</label><span id="vm_desc_nic" class="vm_desc"></span>
+                </li>
+            </ul>
+        </div>
+        <div id="vm_desc_list3" class="vm_desc_list">
+            <ul>
+                <li>
+                    <label>磁盘1：</label><span id="vm_desc_disk1" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>磁盘2：</label><span id="vm_desc_disk2" class="vm_desc"></span>
+                </li>
+                <li>
+                    <label>快照：</label><span id="vm_desc_snapshort" class="vm_desc"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="clear"></div>
 </main>
 <div class="clear"></div>
 <footer id="adminfooter">
