@@ -33,13 +33,43 @@ function guestOnload() {
     document.getElementById("startvm").onclick = startVm;
     document.getElementById("connectvm").onclick = connectVm;
     document.getElementById("stopvm").onclick = stopVm;
+    document.getElementById("changepasword").onclick = changePassword;
 
     getAllVms();
 }
 
+function getSelectedVm() {
+    var list = document.getElementsByName("tr_vm");
+    var i = 0;
+    var ret = new Array();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            var vmname = list[i].childNodes[1].innerHTML;
+            ret.push(vmname);
+        }
+    }
+
+    return ret;
+}
+
+
+function getSelectedVmName() {
+    var list = document.getElementsByName("tr_vm");
+    var i = 0;
+    var data = new Object();
+    for (i = 0; i < list.length; i++) {
+        if (list[i].firstChild.firstChild.checked) {
+            var val = list[i].childNodes[1].innerHTML;
+            data.name = val;
+        }
+    }
+
+    return data;
+}
+
 function getAllVms() {
     $.ajax({
-        url: "/vms?vmname=all",
+        url: "/get_vms_by_user?username="+getCookie("username"),
         method: "GET",
         async: false,
         dataType: "json",
@@ -277,4 +307,63 @@ function stopVm() {
     })
 }
 
+function changePassword(){
+    $.ajax({
+        url: "static/html/changepassword.html",
+        method: "GET",
+        async: false,
+        dataType: "text",
+        beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+        },
+        success: function (result) {
+            document.getElementById("divchgpwd").innerHTML = result;
+            $('.theme-popover-mask').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+            $("#submit_chang_pwd").click(function () {
+                        var old_pwd = document.getElementsByClassName("input_change_pwd")[0].value;
+                        var new_pwd = document.getElementsByClassName("input_change_pwd")[1].value;
+                        var confirm_pwd = document.getElementsByClassName("input_change_pwd")[2].value;
+                        if (old_pwd.length > 0 && new_pwd.length > 0 && confirm_pwd.length > 0) {
+                            if (new_pwd != confirm_pwd) {
+                                alert("新密码不一致，请重新输入！");
+                            } else {
 
+                                var reg = /^[0-9a-zA-Z]+$/;
+                                if (new_pwd.length < 6 || confirm_pwd.length < 6 || !reg.test(new_pwd) || !reg.test(confirm_pwd)) {
+                                    alert("密码不少于6位,由字母、数字组成！");
+                                } else {
+                                    jsondata = new Object();
+                                    jsondata.new = new_pwd;
+                                    jsondata.confirm = confirm_pwd;
+                                    jsondata.old = old_pwd;
+                                    $.ajax({
+                                        url: "/changepwd",
+                                        type: "POST",
+                                        data: JSON.stringify(jsondata),
+                                        dataType: "json",
+                                        beforeSend: function (request) {
+                                            request.setRequestHeader('X-CSRFToken', getCookie("csrftoken"))
+                                        },
+                                        success: function (result) {
+                                            if (result.status == 0) {
+                                                alert("密码修改成功！")
+                                                $('.theme-popover-mask').fadeOut(100);
+                                                $('.theme-popover').slideUp(200);
+                                            } else {
+                                                alert("密码修改失败！")
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                )
+        }
+    });
+}

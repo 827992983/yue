@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^user/delete', login_views.delete_user, name='delete_user'),
     url(r'^user/edit', login_views.edit_user, name='edit_user'),
     url(r'^guest', guest_views.index, name='guest'),
+    url(r'^get_vms_by_user', admin_views.get_vms_by_user, name='get_vms_by_user'),
     url(r'^api', api_views.index),
     url(r'^index', login_views.index, name='index'),
     url(r'^', login_views.index, name='index'),

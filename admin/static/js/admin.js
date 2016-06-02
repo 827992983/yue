@@ -392,7 +392,6 @@ function changePassword() {
                                     $.ajax({
                                         url: "/changepwd",
                                         type: "POST",
-//                                            data: $('#form_change_pwd').serialize(),
                                         data: JSON.stringify(jsondata),
                                         dataType: "json",
                                         beforeSend: function (request) {

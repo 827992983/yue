@@ -175,6 +175,45 @@ def network(request):
     ret = {'status': 3003, 'msg': 'unknown except', 'data': {}}
     return HttpResponse(json.dumps(ret))
 
+def get_vms_by_user(request):
+    ret = {'status': 0, 'msg': 'vm operation success', 'data': {}}
+    data = []
+    print 'get_vms_by_user request'
+    try:
+        if request.method == "GET":
+            print request.GET['username']
+            if len(request.GET['username']) > 0:
+                vms = Vm.objects.filter(user=request.GET['username'])
+                if vms is None or len(vms) < 1:
+                    pass
+                else:
+                    for elem in vms:
+                        vminfo = {}
+                        vminfo['vmid'] = elem.id
+                        vminfo['name'] = elem.name
+                        vminfo['system'] = elem.system
+                        vminfo['cpu'] = elem.cpu
+                        vminfo['memory'] = elem.memory
+                        vminfo['user'] = elem.user
+                        vminfo['istemplate'] = elem.istemplate
+                        vminfo['templatename'] = elem.templatename
+                        vminfo['templatepath'] = elem.templatepath
+                        vminfo['nic1'] = elem.nic1
+                        vminfo['nic2'] = elem.nic2
+                        vminfo['disk1'] = elem.disk1
+                        vminfo['disk2'] = elem.disk2
+                        vminfo['snapshotname'] = elem.snapshotname
+                        vminfo['snapshotpath'] = elem.snapshotpath
+                        vminfo['yourself'] = elem.yourself
+                        data.append(vminfo)
+            ret['data'] = data
+        return HttpResponse(json.dumps(ret))
+    except Exception, e:
+        print 'vm operation error', e
+
+    ret = {'status': 4002, 'msg': 'unknown except', 'data': {}}
+    return HttpResponse(json.dumps(ret))
+
 def vm(request):
     ret = {'status':0, 'msg':'vm operation success', 'data': {}}
     data = []
