@@ -41,7 +41,7 @@ function adminOnload() {
     document.getElementById("network").onclick = networkMgmt;
     document.getElementById("manual").onclick = manual;
     document.getElementById("reference").onclick = reference;
-    document.getElementById("download").onclick = download;
+    <!--document.getElementById("download").onclick = download;-->
     document.getElementById("vm").onclick = vm;
 
     var flagHaveDo = true
