@@ -73,7 +73,7 @@ def mergeMultiSpace(s):
         s = s1
 
 def randomMAC():
-    mac = [ 0x52, 0x54, 0x00,
+    mac = [ 0x2c, 0x07, 0x00,
         random.randint(0x00, 0x7f),
         random.randint(0x00, 0xff),
         random.randint(0x00, 0xff) ]

@@ -25,6 +25,8 @@ run:
 
     python manage.py runserver 0.0.0.0:8000
 
+    default user/password:  admin/123456    user/123456
+
     configure in nginx or apache, you can do it.
   
 contact:
