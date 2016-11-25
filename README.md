@@ -15,7 +15,7 @@ install:
 
     2. yum -y install qemu-kvm spice-server
 
-    3. clone this project
+    3. git clone https://github.com/827992983/yue.git
     
     4. cd yue
     
