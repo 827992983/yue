@@ -1,4 +1,4 @@
-# yue
+![](https://raw.githubusercontent.com/827992983/yue/master/commonstatic/images/logo.png)
 
 This is a qemu/kvm virtual management platform with python-django and spice-html5.
 
